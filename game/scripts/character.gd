@@ -15,6 +15,7 @@ var move_speed: float = 100.0
 var current_tween: Tween = null
 
 @onready var selection_visual = $SelectionCircle
+@onready var sprite: Sprite2D = $Sprite2D
 
 func select():
 	selection_visual.visible = true
@@ -23,21 +24,23 @@ func deselect():
 	selection_visual.visible = false
 
 func apply_stats(stats_to_apply: CharacterStats) -> void:
-	if Sprite2D and stats_to_apply.sprite_texture:
-		$Sprite2D.texture = stats_to_apply.sprite_texture	
+	if sprite and stats_to_apply.sprite_texture:
+		sprite.texture = stats_to_apply.sprite_texture
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if stats == null:
 		push_error("CharacterStats not assigned for character!")
 		return
+	
+	apply_stats(stats)
 
-	if player_id == 1:
-		# modulate = p1_color
-		$Sprite2D.texture = preload("res://assets/palhaço_1.png")
-	else:
-		# modulate = p2_color
-		$Sprite2D.texture = preload("res://assets/palhaço_2.png")
+	# if player_id == 1:
+	# 	# modulate = p1_color
+	# 	$Sprite2D.texture = preload("res://assets/palhaço_1.png")
+	# else:
+	# 	# modulate = p2_color
+	# 	$Sprite2D.texture = preload("res://assets/palhaço_2.png")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

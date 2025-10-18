@@ -6,7 +6,10 @@ extends Node2D
 @export var highlight_layer: TileMapLayer
 @export var selector: Sprite2D
 @export var turn_label: Label
-@export var CharacterScene: PackedScene
+
+@export var tank_scene: PackedScene
+@export var ranged_scene: PackedScene
+@export var mid_scene: PackedScene
 
 
 const HIGHLIGHT_SOURCE_ID = 0
@@ -262,7 +265,7 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 		print("Posição inválida.")
 		return
 
-	var new_troop = CharacterScene.instantiate()
+	var new_troop = tank_scene.instantiate()
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 

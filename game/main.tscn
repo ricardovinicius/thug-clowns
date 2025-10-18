@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=9 format=4 uid="uid://wuov3qqkqij8"]
 
 [ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://scripts/tile_map_layer.gd" id="2_lquwl"]
 [ext_resource type="Texture2D" uid="uid://df0knudj3efk" path="res://assets/highlight_tile.png" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://766jsikflxl" path="res://character.tscn" id="4_lquwl"]
+[ext_resource type="PackedScene" uid="uid://dpdqu0w8xekop" path="res://tank_char.tscn" id="5_272bh"]
+[ext_resource type="PackedScene" uid="uid://b6ksmm8rop6ya" path="res://ranged_char.tscn" id="6_5vw27"]
+[ext_resource type="PackedScene" uid="uid://4cde370j31hb" path="res://mid_char.tscn" id="7_kek77"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 
@@ -47,7 +49,9 @@ spawn_layer_p2 = NodePath("../TileMapLayer/SpawnZone_P2")
 highlight_layer = NodePath("../HighlightLayer")
 selector = NodePath("../Selector")
 turn_label = NodePath("../TurnLabel")
-CharacterScene = ExtResource("4_lquwl")
+tank_scene = ExtResource("5_272bh")
+ranged_scene = ExtResource("6_5vw27")
+mid_scene = ExtResource("7_kek77")
 
 [node name="States" type="Node" parent="GameManager"]
 
