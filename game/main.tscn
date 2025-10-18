@@ -48,11 +48,16 @@ offset = Vector2(0, 8)
 [node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("4_lquwl")]
 position = Vector2(80, 86)
 tilemap = NodePath("../TileMapLayer")
+player_id = 1
+p1_color = Color(1, 0, 0, 1)
+p2_color = Color(0, 0, 1, 1)
 
 [node name="Player2" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("4_lquwl")]
 position = Vector2(305, 86)
 tilemap = NodePath("../TileMapLayer")
 player_id = 2
+p1_color = Color(1, 0, 0, 1)
+p2_color = Color(0, 0, 1, 1)
 
 [node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "selector", "turn_label")]
 script = ExtResource("2_0xm2m")

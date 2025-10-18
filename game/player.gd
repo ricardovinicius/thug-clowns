@@ -1,12 +1,12 @@
 extends Node2D
 
 @export var tilemap: TileMapLayer
-@export var player_id = 1
+@export var player_id: int
 
-@export var p1_color = Color.RED
-@export var p2_color = Color.BLUE
+@export var p1_color: Color = Color.RED
+@export var p2_color: Color = Color.BLUE
 
-var move_speed = 100.0
+var move_speed: float = 100.0
 var current_tween: Tween = null
 
 signal move_finished
@@ -22,9 +22,11 @@ func deselect():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if player_id == 1:
-		modulate = p1_color
+		# modulate = p1_color
+		$Sprite2D.texture = preload("res://palhaço_1.png")
 	else:
-		modulate = p2_color
+		# modulate = p2_color
+		$Sprite2D.texture = preload("res://palhaço_2.png")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
