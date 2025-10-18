@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://24vbsq3cx42a"]
+
+[ext_resource type="Script" uid="uid://bcrbpgxooxvsw" path="res://tropa.gd" id="1_affr5"]
+[ext_resource type="Texture2D" uid="uid://cfqy1slpf81oq" path="res://test tile(4).png" id="2_87bdp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y8rs4"]
+size = Vector2(32, 33)
+
+[node name="tropa" type="CharacterBody2D"]
+collision_layer = 3
+script = ExtResource("1_affr5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_87bdp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_y8rs4")

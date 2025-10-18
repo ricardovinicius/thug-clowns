@@ -40,6 +40,8 @@ tile_map_data = PackedByteArray("AAAHAPz/AAAAAAAAAAAHAP3/AAAAAAAAAAAHAP7/AAAAAAA
 tile_set = SubResource("TileSet_h2yge")
 script = ExtResource("2_lquwl")
 
+[node name="SpawnZone_P1" type="TileMapLayer" parent="TileMapLayer"]
+
 [node name="Selector" type="Sprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_1bvp3")
 texture = ExtResource("2_h2yge")
