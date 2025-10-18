@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://scripts/tile_map_layer.gd" id="2_lquwl"]
 [ext_resource type="Texture2D" uid="uid://b8iukve8mjkal" path="res://assets/circle.png" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://766jsikflxl" path="res://player.tscn" id="4_lquwl"]
+[ext_resource type="PackedScene" uid="uid://766jsikflxl" path="res://character.tscn" id="4_lquwl"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 blend_mode = 1
@@ -44,7 +44,7 @@ selector = NodePath("../Selector")
 turn_label = NodePath("../TurnLabel")
 spawn_layer_p1 = NodePath("../TileMapLayer/SpawnZone_P1")
 spawn_layer_p2 = NodePath("../TileMapLayer/SpawnZone_P2")
-PlayerScene = ExtResource("4_lquwl")
+CharacterScene = ExtResource("4_lquwl")
 
 [node name="States" type="Node" parent="GameManager"]
 

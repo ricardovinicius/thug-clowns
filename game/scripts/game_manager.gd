@@ -5,7 +5,7 @@ extends Node2D
 @export var turn_label: Label
 @export var spawn_layer_p1: TileMapLayer
 @export var spawn_layer_p2: TileMapLayer
-@export var PlayerScene: PackedScene
+@export var CharacterScene: PackedScene
 
 var p1_troops_to_deploy: int = 3:
 	set(value):
@@ -193,7 +193,7 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 		print("Posição inválida.")
 		return
 
-	var new_troop = PlayerScene.instantiate()
+	var new_troop = CharacterScene.instantiate()
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 
@@ -205,12 +205,16 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	
 	if player_id == 1:
 		p1_troops_to_deploy -= 1
+		current_state = State.DEPLOY_P2
+		transition_to(State.DEPLOY_P2)
+		update_turn_ui()
 		if p1_troops_to_deploy == 0:
-			current_state = State.DEPLOY_P2
-			transition_to(State.DEPLOY_P2)
-			update_turn_ui()
+			return
 	else:
 		p2_troops_to_deploy -= 1
+		current_state = State.DEPLOY_P1
+		transition_to(State.DEPLOY_P1)
+		update_turn_ui()
 		if p2_troops_to_deploy == 0:
 			current_state = State.IDLE
 			transition_to(State.IDLE)
