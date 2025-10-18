@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://tdcvwofy7nhk"]
+
+[ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_ijko2"]
+
+[resource]
+script = ExtResource("1_ijko2")
+max_health = 50
+attack_power = 5
+movement_range = 3
+secondary_attack_range = 0
+metadata/_custom_type_script = "uid://667grtldbf7d"

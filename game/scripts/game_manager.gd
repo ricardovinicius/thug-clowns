@@ -6,7 +6,7 @@ extends Node2D
 @export var highlight_layer: TileMapLayer
 @export var selector: Sprite2D
 @export var turn_label: Label
-@export var PlayerScene: PackedScene
+@export var CharacterScene: PackedScene
 
 
 const HIGHLIGHT_SOURCE_ID = 0
@@ -35,7 +35,16 @@ enum State {
 	CHARACTER_MOVING
 }
 
-var current_state = State.DEPLOY_P1
+var current_state = State.DEPLOY_P1:
+	set(value):
+		current_state = value
+		update_turn_ui()
+
+var current_state_plus: GameState = null
+var states = {}
+
+@onready var state_container = $States as Node
+		
 var selected_character: Node2D = null
 
 var current_player_turn: int = 1
@@ -43,8 +52,27 @@ var current_player_turn: int = 1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	current_state = State.DEPLOY_P1
+	states = {
+		State.DEPLOY_P1: DeployP1State.new(),
+		State.DEPLOY_P2: DeployP2State.new(),
+		State.IDLE: IdleState.new(),
+	}
+	for state in states.values():
+		state.controller = self
+		state_container.add_child(state)
 	update_turn_ui()
+	transition_to(State.DEPLOY_P1)
 
+func transition_to(state: State) -> void:
+	if !states.has(state):
+		print("State not found: %s" % str(state))
+		return
+
+	if current_state_plus != null:
+		current_state_plus.exit()
+
+	current_state_plus = states[state]
+	current_state_plus.enter()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -234,7 +262,7 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 		print("Posição inválida.")
 		return
 
-	var new_troop = PlayerScene.instantiate()
+	var new_troop = CharacterScene.instantiate()
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 
@@ -247,13 +275,19 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	
 	if player_id == 1:
 		p1_troops_to_deploy -= 1
+		current_state = State.DEPLOY_P2
+		transition_to(State.DEPLOY_P2)
+		update_turn_ui()
 		if p1_troops_to_deploy == 0:
-			current_state = State.DEPLOY_P2
-			update_turn_ui()
+			return
 	else:
 		p2_troops_to_deploy -= 1
+		current_state = State.DEPLOY_P1
+		transition_to(State.DEPLOY_P1)
+		update_turn_ui()
 		if p2_troops_to_deploy == 0:
 			current_state = State.IDLE
+			transition_to(State.IDLE)
 			current_player_turn = 1
 			update_turn_ui()
 	

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://766jsikflxl"]
 
-[ext_resource type="Script" uid="uid://dav876symkgiv" path="res://scripts/player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://dav876symkgiv" path="res://scripts/character.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://b8iukve8mjkal" path="res://assets/circle.png" id="2_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://c0hxrgb1o8mnt" path="res://assets/palhaço_1.png" id="3_i3pqv"]
 
