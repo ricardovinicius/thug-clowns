@@ -3,13 +3,18 @@ extends Node2D
 @export var tilemap: TileMapLayer
 @export var selector: Sprite2D
 @export var turn_label: Label
-@export var spawn_layer_p1: TyleMapLayer
-@export var spawn_layer_p2: TyleMapLayer
+@export var spawn_layer_p1: TileMapLayer
+@export var spawn_layer_p2: TileMapLayer
+@export var PlayerScene: PackedScene
 
-const TroopScene = preload("res://tropa.tcsn")
-
-var p1_troops_to_deploy: int = 3
-var p2_troops_to_deploy: int = 3
+var p1_troops_to_deploy: int = 3:
+	set(value):
+		p1_troops_to_deploy = value
+		update_turn_ui()
+var p2_troops_to_deploy: int = 3:
+	set(value):
+		p2_troops_to_deploy = value
+		update_turn_ui()
 
 var occupied_tiles = {}
 
@@ -46,7 +51,7 @@ func _process(_delta: float) -> void:
 	
 	selector.position = tile_world_pos
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	pass
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -94,7 +99,7 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 			current_state = State.CHARACTER_SELECTED
 			print("Character selected: %s" % selected_character.name)
 
-func handle_move_command(mouse_position: Vector2) -> void:
+func handle_move_command(_mouse_position: Vector2) -> void:
 	if selected_character == null:
 		return
 
@@ -139,7 +144,7 @@ func _on_character_move_finished() -> void:
 	current_state = State.IDLE
 
 func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
-	var target_layer: TyleMapLayer
+	var target_layer: TileMapLayer
 	var troops_left: int
 	
 	if player_id == 1:
@@ -159,10 +164,11 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	if occupied_tiles.has(map_coords):
 		print("Posição inválida.")
 		return
-	
-	var new_troop = TroopScene.instatiate()
-	new_troop_player_id = player_id
-	
+
+	var new_troop = PlayerScene.instantiate()
+	new_troop.player_id = player_id
+	new_troop.tilemap = tilemap
+
 	add_child(new_troop)
 	
 	new_troop.global_position = tilemap.map_to_local(map_coords)
@@ -185,8 +191,8 @@ func update_turn_ui() -> void:
 	if turn_label:
 		match current_state:
 			State.DEPLOY_P1:
-				turn_label.text = "Player 1: Posicione suas % tropas restantes" %p1_troops_to_deploy
+				turn_label.text = "Player 1: Posicione suas %d tropas restantes" % p1_troops_to_deploy
 			State.DEPLOY_P2:
-				turn_label.text = "Player 2: Posicione suas % tropas restantes" %p2_troops_to_deploy
+				turn_label.text = "Player 2: Posicione suas %d tropas restantes" % p2_troops_to_deploy
 			State.IDLE:
-				turn_label.text = "Turno do Player %" % current_player_turn
+				turn_label.text = "Turno do Player %d" % current_player_turn

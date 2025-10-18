@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0hxrgb1o8mnt"
-path="res://.godot/imported/palhaço_1.png-427c2f2ec3dc0a14e8b13c5d701c279b.ctex"
+uid="uid://bdvh2t3yjtilb"
+path="res://.godot/imported/test_tile_3.png-ba3b492b341142d6aa3abdc11a765693.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://palhaço_1.png"
-dest_files=["res://.godot/imported/palhaço_1.png-427c2f2ec3dc0a14e8b13c5d701c279b.ctex"]
+source_file="res://assets/test_tile_3.png"
+dest_files=["res://.godot/imported/test_tile_3.png-ba3b492b341142d6aa3abdc11a765693.ctex"]
 
 [params]
 

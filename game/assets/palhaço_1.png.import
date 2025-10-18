@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5jluv75cod4w"
-path="res://.godot/imported/circle.png-10953cad44a8947fbdd4128a631e9e52.ctex"
+uid="uid://c0hxrgb1o8mnt"
+path="res://.godot/imported/palhaço_1.png-05631a66579d10ccdbbb1783bce707f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://circle.png"
-dest_files=["res://.godot/imported/circle.png-10953cad44a8947fbdd4128a631e9e52.ctex"]
+source_file="res://assets/palhaço_1.png"
+dest_files=["res://.godot/imported/palhaço_1.png-05631a66579d10ccdbbb1783bce707f5.ctex"]
 
 [params]
 

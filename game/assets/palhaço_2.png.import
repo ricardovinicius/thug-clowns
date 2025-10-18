@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfqy1slpf81oq"
-path="res://.godot/imported/test tile(4).png-44f3ff9745bb3843d06427f6fc30e6d4.ctex"
+uid="uid://bcta1cecfjbaj"
+path="res://.godot/imported/palhaço_2.png-90e06c0ecd493f7f2d7d710c67041abc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test tile(4).png"
-dest_files=["res://.godot/imported/test tile(4).png-44f3ff9745bb3843d06427f6fc30e6d4.ctex"]
+source_file="res://assets/palhaço_2.png"
+dest_files=["res://.godot/imported/palhaço_2.png-90e06c0ecd493f7f2d7d710c67041abc.ctex"]
 
 [params]
 

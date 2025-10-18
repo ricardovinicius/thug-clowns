@@ -23,10 +23,10 @@ func deselect():
 func _ready() -> void:
 	if player_id == 1:
 		# modulate = p1_color
-		$Sprite2D.texture = preload("res://palhaço_1.png")
+		$Sprite2D.texture = preload("res://assets/palhaço_1.png")
 	else:
 		# modulate = p2_color
-		$Sprite2D.texture = preload("res://palhaço_2.png")
+		$Sprite2D.texture = preload("res://assets/palhaço_2.png")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

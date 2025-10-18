@@ -1,34 +1,10 @@
-[gd_scene load_steps=11 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=7 format=4 uid="uid://wuov3qqkqij8"]
 
-[ext_resource type="Texture2D" uid="uid://dl6fvo681ku3h" path="res://test tile(5).png" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://game_manager.gd" id="2_0xm2m"]
-[ext_resource type="Texture2D" uid="uid://cfqy1slpf81oq" path="res://test tile(4).png" id="2_7mycd"]
-[ext_resource type="Texture2D" uid="uid://c0smh2s5yh6p6" path="res://test tile(5)(1).png" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://tile_map_layer.gd" id="2_lquwl"]
+[ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
+[ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://scripts/tile_map_layer.gd" id="2_lquwl"]
+[ext_resource type="Texture2D" uid="uid://b8iukve8mjkal" path="res://assets/circle.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://766jsikflxl" path="res://player.tscn" id="4_lquwl"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0xm2m"]
-texture = ExtResource("1_ig7tw")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/texture_origin = Vector2i(0, -8)
-1:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_272bh"]
-texture = ExtResource("2_7mycd")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/texture_origin = Vector2i(0, -8)
-0:1/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_h2yge"]
-tile_shape = 1
-tile_layout = 5
-tile_size = Vector2i(32, 16)
-sources/0 = SubResource("TileSetAtlasSource_0xm2m")
-sources/1 = SubResource("TileSetAtlasSource_272bh")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 blend_mode = 1
@@ -36,36 +12,37 @@ blend_mode = 1
 [node name="Main" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAHAPz/AAAAAAAAAAAHAP3/AAAAAAAAAAAHAP7/AAAAAAAAAAAHAP//AAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAPz/AAAAAAAAAAAIAP3/AAAAAAAAAAAIAP7/AAAAAAAAAAAIAP//AAAAAAAAAAAIAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAPz/AAAAAAAAAAAJAP3/AAAAAAAAAAAJAP7/AAAAAAAAAAAJAP//AAAAAAAAAAAJAAAAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAPz/AAAAAAAAAAAKAP3/AAAAAAAAAAAKAP7/AAAAAAAAAAAKAP//AAAAAAAAAAAKAAAAAAAAAAAAAAAKAAEAAAAAAAAAAAALAPz/AAAAAAAAAAALAP3/AAAAAAAAAAALAP7/AAAAAAAAAAALAP//AAAAAAAAAAALAAAAAAAAAAAAAAALAAEAAAAAAAAAAAALAAIAAAAAAAAAAAAMAPz/AAAAAAAAAAAMAP3/AAAAAAAAAAAMAP7/AAAAAAAAAAAMAP//AAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAAMAAMAAAAAAAAAAAANAPz/AAAAAAAAAAANAP3/AAAAAAAAAAANAP7/AAAAAAAAAAANAP//AAAAAAAAAAANAAAAAAAAAAAAAAANAAEAAAAAAAAAAAANAAIAAAAAAAAAAAANAAMAAAAAAAAAAAAOAPz/AAAAAAAAAAAOAP3/AAAAAAAAAAAOAP7/AAAAAAAAAAAOAP//AAAAAAAAAAAOAAAAAAAAAAAAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAHAAQAAQAAAAAAAAAHAAUAAQAAAAAAAAAHAAYAAQAAAAAAAAAHAAcAAQAAAAAAAAAHAAgAAQAAAAAAAAAIAAQAAQAAAAAAAAAIAAUAAQAAAAAAAAAIAAYAAQAAAAAAAAAJAAYAAQAAAAAAAAAJAAcAAQAAAAAAAAAJAAgAAQAAAAAAAAAJAAkAAQAAAAAAAAAJAAoAAQAAAAAAAAAJAAQAAQAAAAAAAAAJAAUAAQAAAAAAAAAIAAcAAQAAAAAAAAAIAAgAAQAAAAAAAAAIAAkAAQAAAAAAAAAIAAoAAQAAAAAAAAAHAAkAAQAAAAAAAAAHAAoAAQAAAAAAAAAKAAQAAQAAAAAAAAAKAAUAAQAAAAAAAAAKAAYAAQAAAAAAAAALAAYAAQAAAAAAAAALAAcAAQAAAAAAAAALAAgAAQAAAAAAAAALAAkAAQAAAAAAAAALAAoAAQAAAAAAAAALAAsAAQAAAAAAAAALAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAKAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAJAAEAAAAAAAAAAAALAAQAAQAAAAAAAAALAAUAAQAAAAAAAAAKAAkAAQAAAAAAAAAKAAgAAQAAAAAAAAAKAAoAAQAAAAAAAAAKAAsAAQAAAAAAAAAKAAwAAQAAAAAAAAAKAAcAAQAAAAAAAAAMAAUAAQAAAAAAAAAMAAQAAQAAAAAAAAAMAAYAAQAAAAAAAAAMAAcAAQAAAAAAAAAMAAgAAQAAAAAAAAALAAwAAQAAAAAAAAAMAAoAAQAAAAAAAAAMAAkAAQAAAAAAAAANAAoAAQAAAAAAAAANAAsAAQAAAAAAAAAMAAsAAQAAAAAAAAANAAUAAQAAAAAAAAANAAQAAQAAAAAAAAANAAYAAQAAAAAAAAANAAcAAQAAAAAAAAANAAgAAQAAAAAAAAANAAkAAQAAAAAAAAAOAAQAAQAAAAAAAAAOAAUAAQAAAAAAAAAOAAYAAQAAAAAAAAAOAAcAAQAAAAAAAAAOAAgAAQAAAAAAAAAOAPv/AQAAAAAAAAAOAPr/AQAAAAAAAAAOAPn/AQAAAAAAAAAOAPj/AQAAAAAAAAAOAPf/AQAAAAAAAAAOAPb/AQAAAAAAAAAOAPX/AQAAAAAAAAANAPv/AQAAAAAAAAANAPr/AQAAAAAAAAANAPn/AQAAAAAAAAANAPj/AQAAAAAAAAANAPf/AQAAAAAAAAANAPb/AQAAAAAAAAANAPX/AQAAAAAAAAANAPT/AQAAAAAAAAANAPP/AQAAAAAAAAANAPL/AQAAAAAAAAAOAPT/AQAAAAAAAAAOAPP/AQAAAAAAAAAOAPL/AQAAAAAAAAAOAPH/AQAAAAAAAAAMAPv/AQAAAAAAAAAMAPr/AQAAAAAAAAAMAPn/AQAAAAAAAAAMAPj/AQAAAAAAAAAMAPf/AQAAAAAAAAAMAPb/AQAAAAAAAAAMAPX/AQAAAAAAAAAMAPT/AQAAAAAAAAAMAPP/AQAAAAAAAAAMAPL/AQAAAAAAAAAKAPr/AQAAAAAAAAALAPr/AQAAAAAAAAALAPn/AQAAAAAAAAALAPj/AQAAAAAAAAALAPf/AQAAAAAAAAALAPb/AQAAAAAAAAALAPX/AQAAAAAAAAALAPT/AQAAAAAAAAALAPP/AQAAAAAAAAALAPv/AQAAAAAAAAAKAPv/AQAAAAAAAAAJAPv/AQAAAAAAAAAIAPv/AQAAAAAAAAAHAPv/AQAAAAAAAAAHAPr/AQAAAAAAAAAHAPn/AQAAAAAAAAAHAPj/AQAAAAAAAAAHAPf/AQAAAAAAAAAIAPn/AQAAAAAAAAAIAPj/AQAAAAAAAAAIAPf/AQAAAAAAAAAJAPf/AQAAAAAAAAAJAPb/AQAAAAAAAAAIAPr/AQAAAAAAAAAJAPr/AQAAAAAAAAAJAPn/AQAAAAAAAAAKAPn/AQAAAAAAAAAKAPj/AQAAAAAAAAAKAPf/AQAAAAAAAAAKAPb/AQAAAAAAAAAJAPj/AQAAAAAAAAAKAPX/AQAAAAAAAAA=")
-tile_set = SubResource("TileSet_h2yge")
+tile_set = ExtResource("1_1bvp3")
 script = ExtResource("2_lquwl")
 
 [node name="SpawnZone_P1" type="TileMapLayer" parent="TileMapLayer"]
+z_as_relative = false
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAHAAMAAgAAAAAAAAAHAAIAAgAAAAAAAAAIAAMAAgAAAAAAAAAJAAMAAgAAAAAAAAAIAAIAAgAAAAAAAAAHAAEAAgAAAAAAAAA=")
+tile_set = ExtResource("1_1bvp3")
+
+[node name="SpawnZone_P2" type="TileMapLayer" parent="TileMapLayer"]
+z_as_relative = false
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAOAPz/AgAAAAAAAAAOAP3/AgAAAAAAAAAOAP7/AgAAAAAAAAANAPz/AgAAAAAAAAANAP3/AgAAAAAAAAAMAPz/AgAAAAAAAAA=")
+tile_set = ExtResource("1_1bvp3")
 
 [node name="Selector" type="Sprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_1bvp3")
-texture = ExtResource("2_h2yge")
+texture = ExtResource("3_lquwl")
 offset = Vector2(0, 8)
 
-[node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("4_lquwl")]
-position = Vector2(80, 86)
-tilemap = NodePath("../TileMapLayer")
-player_id = 1
-p1_color = Color(1, 0, 0, 1)
-p2_color = Color(0, 0, 1, 1)
-
-[node name="Player2" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("4_lquwl")]
-position = Vector2(305, 86)
-tilemap = NodePath("../TileMapLayer")
-player_id = 2
-p1_color = Color(1, 0, 0, 1)
-p2_color = Color(0, 0, 1, 1)
-
-[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "selector", "turn_label")]
+[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "selector", "turn_label", "spawn_layer_p1", "spawn_layer_p2")]
 script = ExtResource("2_0xm2m")
 tilemap = NodePath("../TileMapLayer")
 selector = NodePath("../Selector")
 turn_label = NodePath("../TurnLabel")
+spawn_layer_p1 = NodePath("../TileMapLayer/SpawnZone_P1")
+spawn_layer_p2 = NodePath("../TileMapLayer/SpawnZone_P2")
+PlayerScene = ExtResource("4_lquwl")
 
 [node name="TurnLabel" type="Label" parent="."]
 offset_left = 12.0
