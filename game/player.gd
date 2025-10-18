@@ -1,13 +1,17 @@
 extends Node2D
 
 @export var tilemap: TileMapLayer
+@export var player_id = 1
+
+@export var p1_color = Color.RED
+@export var p2_color = Color.BLUE
 
 var move_speed = 100.0
 var current_tween: Tween = null
 
-@onready var selection_visual = $SelectionCircle
+signal move_finished
 
-signal move_finished # TO BE USED LATER
+@onready var selection_visual = $SelectionCircle
 
 func select():
 	selection_visual.visible = true
@@ -17,8 +21,10 @@ func deselect():
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	if player_id == 1:
+		modulate = p1_color
+	else:
+		modulate = p2_color
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

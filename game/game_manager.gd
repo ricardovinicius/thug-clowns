@@ -2,7 +2,7 @@ extends Node2D
 
 @export var tilemap: TileMapLayer
 @export var selector: Sprite2D
-@export var player: Node2D
+@export var turn_label: Label
 
 var hovered_grid_pos: Vector2i
 
@@ -17,9 +17,11 @@ enum State {
 var current_state = State.IDLE
 var selected_character: Node2D = null
 
+var current_player_turn: int = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	update_turn_ui()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,6 +38,9 @@ func _input(event: InputEvent) -> void:
 	pass
 
 func _unhandled_input(event: InputEvent) -> void:
+	if current_state == State.CHARACTER_MOVING:
+		return
+
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			match current_state:
@@ -43,9 +48,6 @@ func _unhandled_input(event: InputEvent) -> void:
 					handle_character_selection(event.position)
 				State.CHARACTER_SELECTED:
 					handle_move_command(event.position)
-				State.CHARACTER_MOVING:
-					# Ignore clicks while moving
-					pass
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			if current_state == State.CHARACTER_SELECTED:
 				deselect_character()
@@ -64,6 +66,10 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 		var selected_node = results[0].collider
 
 		if selected_node.has_method("select"):
+			if selected_node.get("player_id") != current_player_turn:
+				print("Cannot select character: Not player's turn")
+				return
+
 			selected_character = selected_node
 			selected_node.select()
 
@@ -94,12 +100,28 @@ func handle_move_command(mouse_position: Vector2) -> void:
 
 func deselect_character() -> void:
 	if selected_character:
-		selected_character.move_finished.disconnect(deselect_character)
+		if selected_character.move_finished.is_connected(_on_character_move_finished):
+			selected_character.move_finished.disconnect(_on_character_move_finished)
+
 		selected_character.deselect()
 		selected_character = null
-	
-	current_state = State.IDLE
-	print("Character deselected")
+		current_state = State.IDLE
+
+		print("Character deselected")
 
 func _on_character_move_finished() -> void:
 	deselect_character()
+
+	if current_player_turn == 1:
+		current_player_turn = 2
+	else:
+		current_player_turn = 1
+
+	print("Now it's Player %d's turn" % current_player_turn)
+	update_turn_ui()
+
+	current_state = State.IDLE
+
+func update_turn_ui() -> void:
+	if turn_label:
+		turn_label.text = "Player %d's Turn" % current_player_turn

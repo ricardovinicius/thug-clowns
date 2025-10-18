@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://766jsikflxl"]
+
+[ext_resource type="Script" uid="uid://dav876symkgiv" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Texture2D" uid="uid://b5jluv75cod4w" path="res://circle.png" id="2_i3pqv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
+size = Vector2(22, 20)
+
+[node name="Player" type="Area2D" node_paths=PackedStringArray("tilemap")]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_onrkg")
+tilemap = NodePath("")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+mouse_filter = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_272bh")
+
+[node name="SelectionCircle" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_i3pqv")
