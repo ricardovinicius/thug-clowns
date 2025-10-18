@@ -3,24 +3,36 @@ extends Node2D
 @export var tilemap: TileMapLayer
 @export var selector: Sprite2D
 @export var turn_label: Label
+@export var spawn_layer_p1: TyleMapLayer
+@export var spawn_layer_p2: TyleMapLayer
+
+const TroopScene = preload("res://tropa.tcsn")
+
+var p1_troops_to_deploy: int = 3
+var p2_troops_to_deploy: int = 3
+
+var occupied_tiles = {}
 
 var hovered_grid_pos: Vector2i
 
 const SELECTABLE_LAYER = 2
 
 enum State {
+	DEPLOY_P1,
+	DEPLOY_P2,
 	IDLE,
 	CHARACTER_SELECTED,
 	CHARACTER_MOVING
 }
 
-var current_state = State.IDLE
+var current_state = State.DEPLOY_P1
 var selected_character: Node2D = null
 
 var current_player_turn: int = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	current_state = State.DEPLOY_P1
 	update_turn_ui()
 
 
@@ -44,6 +56,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			match current_state:
+				State.DEPLOY_P1:
+					handle_deploy_command(hovered_grid_pos, 1)
+				State.DEPLOY_P2:
+					handle_deploy_command(hovered_grid_pos, 2)
 				State.IDLE:
 					handle_character_selection(event.position)
 				State.CHARACTER_SELECTED:
@@ -122,6 +138,55 @@ func _on_character_move_finished() -> void:
 
 	current_state = State.IDLE
 
+func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
+	var target_layer: TyleMapLayer
+	var troops_left: int
+	
+	if player_id == 1:
+		target_layer = spawn_layer_p1
+		troops_left = p1_troops_to_deploy
+	else:
+		target_layer = spawn_layer_p2
+		troops_left = p2_troops_to_deploy
+	
+	if troops_left <= 0:
+		return
+	
+	if target_layer.get_cell_tile_data(map_coords) == null:
+		print("Não é uma zona de spawn.")
+		return
+	
+	if occupied_tiles.has(map_coords):
+		print("Posição inválida.")
+		return
+	
+	var new_troop = TroopScene.instatiate()
+	new_troop_player_id = player_id
+	
+	add_child(new_troop)
+	
+	new_troop.global_position = tilemap.map_to_local(map_coords)
+	
+	occupied_tiles[map_coords] = new_troop
+	
+	if player_id == 1:
+		p1_troops_to_deploy -= 1
+		if p1_troops_to_deploy == 0:
+			current_state = State.DEPLOY_P2
+			update_turn_ui()
+	else:
+		p2_troops_to_deploy -= 1
+		if p2_troops_to_deploy == 0:
+			current_state = State.IDLE
+			current_player_turn = 1
+			update_turn_ui()
+	
 func update_turn_ui() -> void:
 	if turn_label:
-		turn_label.text = "Player %d's Turn" % current_player_turn
+		match current_state:
+			State.DEPLOY_P1:
+				turn_label.text = "Player 1: Posicione suas % tropas restantes" %p1_troops_to_deploy
+			State.DEPLOY_P2:
+				turn_label.text = "Player 2: Posicione suas % tropas restantes" %p2_troops_to_deploy
+			State.IDLE:
+				turn_label.text = "Turno do Player %" % current_player_turn
