@@ -2,6 +2,7 @@ extends Node2D
 
 @export var tilemap: TileMapLayer
 @export var player_id: int
+@export var stats: CharacterStats
 
 @export var p1_color: Color = Color.RED
 @export var p2_color: Color = Color.BLUE
@@ -19,8 +20,16 @@ func select():
 func deselect():
 	selection_visual.visible = false
 
+func apply_stats(stats_to_apply: CharacterStats) -> void:
+	if Sprite2D and stats_to_apply.sprite_texture:
+		$Sprite2D.texture = stats_to_apply.sprite_texture	
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if stats == null:
+		push_error("CharacterStats not assigned for character!")
+		return
+
 	if player_id == 1:
 		# modulate = p1_color
 		$Sprite2D.texture = preload("res://assets/palhaço_1.png")

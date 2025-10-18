@@ -3,11 +3,10 @@
 [ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://scripts/tile_map_layer.gd" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://b8iukve8mjkal" path="res://assets/circle.png" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://df0knudj3efk" path="res://assets/highlight_tile.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://766jsikflxl" path="res://character.tscn" id="4_lquwl"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
-blend_mode = 1
 
 [node name="Main" type="Node2D"]
 
