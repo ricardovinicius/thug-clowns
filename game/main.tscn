@@ -19,12 +19,14 @@ tile_set = ExtResource("1_1bvp3")
 script = ExtResource("2_lquwl")
 
 [node name="SpawnZone_P1" type="TileMapLayer" parent="TileMapLayer"]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAHAAMAAgAAAAAAAAAHAAIAAgAAAAAAAAAIAAMAAgAAAAAAAAAJAAMAAgAAAAAAAAAIAAIAAgAAAAAAAAAHAAEAAgAAAAAAAAA=")
 tile_set = ExtResource("1_1bvp3")
 
 [node name="SpawnZone_P2" type="TileMapLayer" parent="TileMapLayer"]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAOAPz/AgAAAAAAAAAOAP3/AgAAAAAAAAAOAP7/AgAAAAAAAAANAPz/AgAAAAAAAAANAP3/AgAAAAAAAAAMAPz/AgAAAAAAAAA=")
@@ -43,6 +45,8 @@ turn_label = NodePath("../TurnLabel")
 spawn_layer_p1 = NodePath("../TileMapLayer/SpawnZone_P1")
 spawn_layer_p2 = NodePath("../TileMapLayer/SpawnZone_P2")
 PlayerScene = ExtResource("4_lquwl")
+
+[node name="States" type="Node" parent="GameManager"]
 
 [node name="TurnLabel" type="Label" parent="."]
 offset_left = 12.0
