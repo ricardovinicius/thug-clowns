@@ -6,10 +6,12 @@ extends Node2D
 @export var p1_color: Color = Color.RED
 @export var p2_color: Color = Color.BLUE
 
-var move_speed: float = 100.0
-var current_tween: Tween = null
+@export var movement_range: int = 3
 
 signal move_finished
+
+var move_speed: float = 100.0
+var current_tween: Tween = null
 
 @onready var selection_visual = $SelectionCircle
 

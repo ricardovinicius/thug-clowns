@@ -1,11 +1,16 @@
 extends Node2D
 
 @export var tilemap: TileMapLayer
-@export var selector: Sprite2D
-@export var turn_label: Label
 @export var spawn_layer_p1: TileMapLayer
 @export var spawn_layer_p2: TileMapLayer
+@export var highlight_layer: TileMapLayer
+@export var selector: Sprite2D
+@export var turn_label: Label
 @export var PlayerScene: PackedScene
+
+
+const HIGHLIGHT_SOURCE_ID = 0
+const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
 
 var p1_troops_to_deploy: int = 3:
 	set(value):
@@ -73,6 +78,45 @@ func _unhandled_input(event: InputEvent) -> void:
 			if current_state == State.CHARACTER_SELECTED:
 				deselect_character()
 
+func clear_movement_range() -> void:
+	if highlight_layer:
+		highlight_layer.clear()
+
+func show_movement_range(character: Node2D) -> void:
+	clear_movement_range()
+	
+	var start_pos: Vector2i = tilemap.local_to_map(character.global_position)
+	var max_range: int = character.get("movement_range")
+	
+	var valid_tiles = []
+	
+	tilemap.astargrid.set_point_solid(start_pos, false)
+	
+	for x in range(start_pos.x - max_range, start_pos.x + max_range + 1):
+		for y in range (start_pos.y - max_range, start_pos.x + max_range + 1):
+			var target_pos = Vector2i(x, y)
+			
+			if target_pos == start_pos:
+				continue
+			
+			var path: PackedVector2Array = tilemap.astargrid.get_point_path(start_pos, target_pos)
+			
+			if path.is_empty():
+				continue
+			
+			var path_cost = path.size() - 1
+			
+			if path_cost > max_range:
+				continue
+			
+			valid_tiles.append(target_pos)
+		
+		tilemap.astargrid.set_point_solid(start_pos, true)
+		
+		for tile in valid_tiles:
+			highlight_layer.set_cell(tile, HIGHLIGHT_SOURCE_ID, HIGHLIGHT_ATLAS_COORDS)
+		
+		
 func handle_character_selection(mouse_position: Vector2) -> void:
 	var space_state = get_world_2d().direct_space_state
 
@@ -98,6 +142,15 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 
 			current_state = State.CHARACTER_SELECTED
 			print("Character selected: %s" % selected_character.name)
+			
+			show_movement_range(selected_character)
+	
+func update_tile_occupation(from_pos: Vector2i, to_pos: Vector2i, character: Node2D):
+	occupied_tiles.erase(from_pos)
+	tilemap.astargrid.set_point_solid(from_pos, false)
+	
+	occupied_tiles[to_pos] = character
+	tilemap.astargrid.set_point_solid(to_pos, true)
 
 func handle_move_command(_mouse_position: Vector2) -> void:
 	if selected_character == null:
@@ -105,21 +158,37 @@ func handle_move_command(_mouse_position: Vector2) -> void:
 
 	var player_grid_pos = tilemap.local_to_map(selected_character.global_position)
 	var target_grid_pos = hovered_grid_pos
-
-	var target_world_post = tilemap.map_to_local(target_grid_pos)
-	print("Left clicked on grid position: %s, world position: %s" % [target_grid_pos, target_world_post])
-
-	var path: PackedVector2Array = tilemap.astargrid.get_point_path(
-		player_grid_pos,
-		target_grid_pos
-	)
 	
-	if selected_character.has_method("move_along_path"):
-		current_state = State.CHARACTER_MOVING
-		print("Moving character along path...")
-		selected_character.move_along_path(path)
+	var path: PackedVector2Array = tilemap.astargrid.get_point_path(player_grid_pos, target_grid_pos)
+	
+	if path.is_empty():
+		print("Nenhum caminho disponivel.")
+		return
+	
+	var path_cost = path.size() - 1
+	
+	if path_cost == 0:
+		deselect_character()
+		return
+	
+	var max_move = selected_character.get("movement_range")
+	
+	if path_cost > max_move:
+		print("Nao e possivel ir para la")
+		return
+	
+	if occupied_tiles.has(path[-1]):
+		print("Posicao final ja ocupada.")
+		return
+	
+	update_tile_occupation(player_grid_pos, target_grid_pos, selected_character)
+	
+	current_state = State.CHARACTER_MOVING
+	selected_character.move_along_path(path)
 
 func deselect_character() -> void:
+	clear_movement_range()
+	
 	if selected_character:
 		if selected_character.move_finished.is_connected(_on_character_move_finished):
 			selected_character.move_finished.disconnect(_on_character_move_finished)
@@ -174,6 +243,7 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	new_troop.global_position = tilemap.map_to_local(map_coords)
 	
 	occupied_tiles[map_coords] = new_troop
+	tilemap.astargrid.set_point_solid(map_coords, true)
 	
 	if player_id == 1:
 		p1_troops_to_deploy -= 1
