@@ -5,6 +5,16 @@ extends Node2D
 var move_speed = 100.0
 var current_tween: Tween = null
 
+@onready var selection_visual = $SelectionCircle
+
+signal move_finished # TO BE USED LATER
+
+func select():
+	selection_visual.visible = true
+
+func deselect():
+	selection_visual.visible = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -13,21 +23,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-func move_to_position(target_position: Vector2) -> void:
-	if current_tween:
-		current_tween.kill()
-	
-	var distance = global_position.distance_to(target_position)
-	if distance == 0:
-		return
-
-	var duration = distance / move_speed
-	current_tween = create_tween()
-	current_tween.set_parallel(true)
-
-	current_tween.tween_property(self, "global_position", target_position, duration)
-
 
 func move_along_path(path: PackedVector2Array) -> void:
 	print("Moving along path: %s" % path)
@@ -62,3 +57,8 @@ func move_along_path(path: PackedVector2Array) -> void:
 		
 		# 5. Atualize o "último ponto" para o próximo loop
 		last_position = target_position
+	
+	current_tween.finished.connect(func():
+		print("Move to position finished")
+		emit_signal("move_finished")
+	)

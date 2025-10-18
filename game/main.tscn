@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=11 format=4 uid="uid://wuov3qqkqij8"]
 
 [ext_resource type="Texture2D" uid="uid://dl6fvo681ku3h" path="res://test tile(5).png" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://game_manager.gd" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://c0smh2s5yh6p6" path="res://test tile(5)(1).png" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://tile_map_layer.gd" id="2_lquwl"]
 [ext_resource type="Script" uid="uid://dav876symkgiv" path="res://player.gd" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://b5jluv75cod4w" path="res://circle.png" id="5_7mycd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0xm2m"]
 texture = ExtResource("1_ig7tw")
@@ -24,6 +25,9 @@ sources/0 = SubResource("TileSetAtlasSource_0xm2m")
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 blend_mode = 1
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
+size = Vector2(22, 20)
+
 [node name="Main" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -36,8 +40,10 @@ material = SubResource("CanvasItemMaterial_1bvp3")
 texture = ExtResource("2_h2yge")
 offset = Vector2(0, 8)
 
-[node name="Player" type="Node2D" parent="." node_paths=PackedStringArray("tilemap")]
+[node name="Player" type="Area2D" parent="." node_paths=PackedStringArray("tilemap")]
 position = Vector2(80, 86)
+collision_layer = 2
+collision_mask = 0
 script = ExtResource("3_1bvp3")
 tilemap = NodePath("../TileMapLayer")
 
@@ -46,10 +52,17 @@ offset_left = -8.0
 offset_top = -8.0
 offset_right = 8.0
 offset_bottom = 8.0
-metadata/_edit_lock_ = true
+mouse_filter = 2
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("tilemap", "selector", "player")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_272bh")
+
+[node name="SelectionCircle" type="Sprite2D" parent="Player"]
+visible = false
+texture = ExtResource("5_7mycd")
+
+[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "selector", "player")]
 script = ExtResource("2_0xm2m")
 tilemap = NodePath("../TileMapLayer")
 selector = NodePath("../Selector")
-player = NodePath("../Player")
+player = NodePath("")
