@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=15 format=4 uid="uid://wuov3qqkqij8"]
 
 [ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://3alpsgfymeb7" path="res://test_char.tscn" id="8_kek77"]
 [ext_resource type="Texture2D" uid="uid://veep1e4vc2bm" path="res://assets/run.png" id="9_efxa6"]
 [ext_resource type="Resource" uid="uid://osp7qj5xbrxt" path="res://scripts/character_stats/TestStats.tres" id="9_kek77"]
+[ext_resource type="Texture2D" uid="uid://dtf0va3rsvjsv" path="res://assets/special_1.png" id="11_ycdy4"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 
@@ -84,9 +85,16 @@ offset_right = 67.0
 offset_bottom = 34.0
 icon = ExtResource("9_efxa6")
 
+[node name="SpecialButton" type="Button" parent="GameManager/CanvasLayer/ActionUI_P1"]
+layout_mode = 0
+offset_left = 67.0
+offset_right = 107.0
+offset_bottom = 40.0
+icon = ExtResource("11_ycdy4")
+
 [node name="ActionUI_P2" type="Panel" parent="GameManager/CanvasLayer"]
 visible = false
-offset_left = 345.0
+offset_left = 333.0
 offset_top = 10.0
 offset_right = 438.0
 offset_bottom = 50.0
@@ -104,6 +112,13 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 icon = ExtResource("8_4c57u")
+
+[node name="SpecialButton" type="Button" parent="GameManager/CanvasLayer/ActionUI_P2"]
+layout_mode = 0
+offset_left = 65.0
+offset_right = 105.0
+offset_bottom = 40.0
+icon = ExtResource("11_ycdy4")
 
 [node name="States" type="Node" parent="GameManager"]
 
@@ -130,5 +145,7 @@ stats = ExtResource("9_kek77")
 
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P1/AttackButton" to="GameManager" method="_on_attack_button_pressed"]
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P1/RunButton" to="GameManager" method="_on_run_button_pressed"]
+[connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P1/SpecialButton" to="GameManager" method="_on_special_button_pressed"]
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P2/RunButton" to="GameManager" method="_on_run_button_pressed"]
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P2/AttackButton" to="GameManager" method="_on_attack_button_pressed"]
+[connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P2/SpecialButton" to="GameManager" method="_on_special_button_pressed"]

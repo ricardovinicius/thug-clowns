@@ -38,7 +38,8 @@ enum State {
 	CHARACTER_SELECTED,
 	SELECTING_ATTACK_TARGET,
 	SELECTING_RUN_TARGET,
-	CHARACTER_MOVING
+	CHARACTER_MOVING,
+	SELECTING_SPECIAL_TARGET
 }
 
 var current_state_plus: GameState = null
@@ -68,7 +69,8 @@ func _ready() -> void:
 		State.CHARACTER_MOVING: CharacterMovingState.new(),
 		State.CHARACTER_SELECTED: CharacterSelectState.new(),
 		State.SELECTING_ATTACK_TARGET: SelectingAttackTargetState.new(),
-		State.SELECTING_RUN_TARGET: SelectingRunTargetState.new()
+		State.SELECTING_RUN_TARGET: SelectingRunTargetState.new(),
+		State.SELECTING_SPECIAL_TARGET: SelectingSpecialTargetState.new()
 	}
 
 	for state in states.values():
@@ -120,6 +122,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				handle_attack_command(hovered_grid_pos)
 			elif current_state_plus is SelectingRunTargetState:
 				handle_run_command(event.position)
+			elif current_state_plus is SelectingSpecialTargetState:
+				handle_special_command(hovered_grid_pos)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			if current_state_plus is CharacterSelectState:
 				deselect_character()
@@ -166,6 +170,20 @@ func show_attack_range() -> void:
 	clear_highlight()
 	
 	var max_range = selected_character.stats.primary_attack_range
+	var start_pos: Vector2i = tilemap.local_to_map(selected_character.global_position)
+
+	for x in range(start_pos.x - max_range, start_pos.x + max_range + 1):
+		for y in range(start_pos.y - max_range, start_pos.x + max_range + 1):
+			var target_pos = Vector2i(x, y)
+			
+			var distance = start_pos.distance_to(target_pos)
+			if distance <= max_range:
+				highlight_layer.set_cell(target_pos, ATTACK_HIGHLIGHT_SOURCE_ID, ATTACK_HIGHLIGHT_ATLAS_COORDS)
+
+func show_special_range() -> void:
+	clear_highlight()
+	
+	var max_range = selected_character.stats.special_ability.range
 	var start_pos: Vector2i = tilemap.local_to_map(selected_character.global_position)
 
 	for x in range(start_pos.x - max_range, start_pos.x + max_range + 1):
@@ -239,6 +257,34 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 			print("Character selected: %s" % selected_character.name)
 
 			# show_movement_range(selected_character)
+
+func handle_special_command(target_grid_pos: Vector2i) -> void:
+	if selected_character == null:
+		return
+
+	if !occupied_tiles.has(target_grid_pos):
+		print("No target at selected position for special ability.")
+		deselect_character()
+		return
+
+	var target_character = occupied_tiles[target_grid_pos]
+
+	if target_character.get("player_id") == selected_character.get("player_id"):
+		print("Cannot use special ability on friendly unit.")
+		return
+	
+	var start_pos: Vector2i = tilemap.local_to_map(selected_character.global_position)
+	var distance = start_pos.distance_to(target_grid_pos)
+	var max_range = selected_character.stats.special_ability.range
+	
+	if distance > max_range:
+		print("Target out of range for special ability.")
+		return
+	
+	print("Using special ability on target at %s" % str(target_grid_pos))
+	selected_character.use_special_ability([target_character])
+	
+	deselect_character()
 	
 func update_tile_occupation(from_pos: Vector2i, to_pos: Vector2i, character: Node2D):
 	occupied_tiles.erase(from_pos)
@@ -524,3 +570,31 @@ func _check_game_over(dead_player_id: int) -> void:
 		turn_label.text = "Player %d Wins!" % (3 - dead_player_id)
 		update_turn_ui()
 		get_tree().paused = true
+
+
+func _on_special_button_pressed() -> void:
+	if !(current_state_plus is CharacterSelectState):
+		print("No character selected to use special ability.")
+		return
+	if selected_character == null:
+		print("No character selected to use special ability.")
+		return
+	
+	print("Special ability action initiated for character %s." % selected_character.name)
+
+	var ability = selected_character.stats.special_ability
+	if ability == null:
+		print("Character %s has no special ability assigned." % selected_character.name)
+		return
+	
+	print("Using special ability: %s" % ability.ability_name)
+
+	match ability.targeting_type:
+		SpecialAbility.TargetingType.SELF:
+			selected_character.use_special_ability([selected_character])
+			deselect_character()
+		SpecialAbility.TargetingType.ENEMY:
+			print("Transitioning to SelectingSpecialTargetState for special ability.")
+			transition_to(State.SELECTING_SPECIAL_TARGET)
+		_:
+			print("Special ability targeting type not implemented.")

@@ -188,5 +188,18 @@ func die() -> void:
 
 	queue_free()
 
+func use_special_ability(targets: Array) -> void:
+	if !can_use_standard_action:
+		push_warning("Standard action already used this turn!")
+		return
+
+	if stats.special_ability == null:
+		push_warning("No special ability assigned to character %s!" % stats.character_name)
+		return
+
+	stats.special_ability.execute(self, targets)
+	can_use_standard_action = false
+	print("Character %s used special ability %s on target %s." % [stats.character_name, stats.special_ability.ability_name, targets[0].stats.character_name])
+
 func _update_health_label() -> void:
 	health_label.text = "%d/%d" % [current_health, stats.max_health]
