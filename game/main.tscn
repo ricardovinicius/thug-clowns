@@ -128,4 +128,5 @@ stats = ExtResource("9_kek77")
 
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P1/AttackButton" to="GameManager" method="_on_attack_button_pressed"]
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P1/RunButton" to="GameManager" method="_on_run_button_pressed"]
+[connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P2/RunButton" to="GameManager" method="_on_run_button_pressed"]
 [connection signal="pressed" from="GameManager/CanvasLayer/ActionUI_P2/AttackButton" to="GameManager" method="_on_attack_button_pressed"]
