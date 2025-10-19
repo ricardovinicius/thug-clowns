@@ -1,7 +1,10 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://b2ldyycuwp1bu"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=3 format=3 uid="uid://b2ldyycuwp1bu"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_8ni3u"]
+[ext_resource type="Texture2D" uid="uid://c0hxrgb1o8mnt" path="res://assets/palhaco_1.png" id="2_u0uta"]
 
 [resource]
 script = ExtResource("1_8ni3u")
+character_name = "Mid"
+sprite_texture = ExtResource("2_u0uta")
 metadata/_custom_type_script = "uid://667grtldbf7d"

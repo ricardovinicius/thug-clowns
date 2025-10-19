@@ -15,14 +15,15 @@ extends Node2D
 const HIGHLIGHT_SOURCE_ID = 0
 const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
 
-var p1_troops_to_deploy: int = 3:
+var p1_troops_to_deploy: Array[PackedScene] = []:
 	set(value):
 		p1_troops_to_deploy = value
 		update_turn_ui()
-var p2_troops_to_deploy: int = 3:
+var p2_troops_to_deploy: Array[PackedScene] = []:
 	set(value):
 		p2_troops_to_deploy = value
 		update_turn_ui()
+	
 
 var occupied_tiles = {}
 
@@ -54,6 +55,8 @@ var current_player_turn: int = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	p1_troops_to_deploy = [tank_scene, mid_scene, ranged_scene]
+	p2_troops_to_deploy = [tank_scene, mid_scene, ranged_scene]
 	current_state = State.DEPLOY_P1
 	states = {
 		State.DEPLOY_P1: DeployP1State.new(),
@@ -124,7 +127,7 @@ func show_movement_range(character: Node2D) -> void:
 	tilemap.astargrid.set_point_solid(start_pos, false)
 	
 	for x in range(start_pos.x - max_range, start_pos.x + max_range + 1):
-		for y in range (start_pos.y - max_range, start_pos.x + max_range + 1):
+		for y in range(start_pos.y - max_range, start_pos.x + max_range + 1):
 			var target_pos = Vector2i(x, y)
 			
 			if target_pos == start_pos:
@@ -249,10 +252,10 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	
 	if player_id == 1:
 		target_layer = spawn_layer_p1
-		troops_left = p1_troops_to_deploy
+		troops_left = p1_troops_to_deploy.size()
 	else:
 		target_layer = spawn_layer_p2
-		troops_left = p2_troops_to_deploy
+		troops_left = p2_troops_to_deploy.size()
 	
 	if troops_left <= 0:
 		return
@@ -265,7 +268,11 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 		print("Posição inválida.")
 		return
 
-	var new_troop = tank_scene.instantiate()
+	var new_troop = null
+	if player_id == 1:
+		new_troop = p1_troops_to_deploy[0].instantiate()
+	else:
+		new_troop = p2_troops_to_deploy[0].instantiate()
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 
@@ -277,29 +284,35 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	tilemap.astargrid.set_point_solid(map_coords, true)
 	
 	if player_id == 1:
-		p1_troops_to_deploy -= 1
+		p1_troops_to_deploy.pop_front()
 		current_state = State.DEPLOY_P2
 		transition_to(State.DEPLOY_P2)
-		update_turn_ui()
-		if p1_troops_to_deploy == 0:
+		if p1_troops_to_deploy.size() == 0:
 			return
+		update_turn_ui()
 	else:
-		p2_troops_to_deploy -= 1
+		p2_troops_to_deploy.pop_front()
 		current_state = State.DEPLOY_P1
 		transition_to(State.DEPLOY_P1)
-		update_turn_ui()
-		if p2_troops_to_deploy == 0:
+		if p2_troops_to_deploy.size() == 0:
 			current_state = State.IDLE
 			transition_to(State.IDLE)
 			current_player_turn = 1
 			update_turn_ui()
+		update_turn_ui()
 	
 func update_turn_ui() -> void:
 	if turn_label:
 		match current_state:
 			State.DEPLOY_P1:
-				turn_label.text = "Player 1: Posicione suas %d tropas restantes" % p1_troops_to_deploy
+				var p1_next_name = ""
+				if p1_troops_to_deploy.size() > 0:
+					p1_next_name = p1_troops_to_deploy[0].instantiate().stats.character_name
+				turn_label.text = "Player 1: Posicione sua tropa <%s>" % p1_next_name
 			State.DEPLOY_P2:
-				turn_label.text = "Player 2: Posicione suas %d tropas restantes" % p2_troops_to_deploy
+				var p2_next_name = ""
+				if p2_troops_to_deploy.size() > 0:
+					p2_next_name = p2_troops_to_deploy[0].instantiate().stats.character_name
+				turn_label.text = "Player 2: Posicione sua tropa <%s>" % p2_next_name
 			State.IDLE:
 				turn_label.text = "Turno do Player %d" % current_player_turn

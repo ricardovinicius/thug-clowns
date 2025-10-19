@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcta1cecfjbaj"
-path="res://.godot/imported/palhaço_2.png-90e06c0ecd493f7f2d7d710c67041abc.ctex"
+uid="uid://cwlmgo5qjuros"
+path="res://.godot/imported/palhaco_3.png-1a81953474da417e791d2288d2e19678.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/palhaço_2.png"
-dest_files=["res://.godot/imported/palhaço_2.png-90e06c0ecd493f7f2d7d710c67041abc.ctex"]
+source_file="res://assets/palhaco_3.png"
+dest_files=["res://.godot/imported/palhaco_3.png-1a81953474da417e791d2288d2e19678.ctex"]
 
 [params]
 

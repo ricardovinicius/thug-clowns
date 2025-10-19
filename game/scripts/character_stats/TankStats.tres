@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="CharacterStats" load_steps=3 format=3 uid="uid://tdcvwofy7nhk"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_ijko2"]
-[ext_resource type="Texture2D" uid="uid://bcta1cecfjbaj" path="res://assets/palhaço_2.png" id="2_03v1f"]
+[ext_resource type="Texture2D" uid="uid://bcta1cecfjbaj" path="res://assets/palhaco_2.png" id="2_03v1f"]
 
 [resource]
 script = ExtResource("1_ijko2")
+character_name = "Tank"
 max_health = 50
 attack_power = 5
 movement_range = 3
-secondary_attack_range = 0
 sprite_texture = ExtResource("2_03v1f")
 metadata/_custom_type_script = "uid://667grtldbf7d"

@@ -1,4 +1,5 @@
 extends Node2D
+class_name Character
 
 @export var tilemap: TileMapLayer
 @export var player_id: int
@@ -26,6 +27,9 @@ func deselect():
 func apply_stats(stats_to_apply: CharacterStats) -> void:
 	if sprite and stats_to_apply.sprite_texture:
 		sprite.texture = stats_to_apply.sprite_texture
+		print("Applied sprite texture for %s" % stats_to_apply.character_name)
+	
+	movement_range = stats_to_apply.movement_range
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -34,6 +38,7 @@ func _ready() -> void:
 		return
 	
 	apply_stats(stats)
+	print("Character %s ready with stats applied." % stats.character_name)
 
 	# if player_id == 1:
 	# 	# modulate = p1_color

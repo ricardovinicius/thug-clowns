@@ -1,7 +1,10 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://6qk68om1s6h4"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=3 format=3 uid="uid://6qk68om1s6h4"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_7b7dg"]
+[ext_resource type="Texture2D" uid="uid://cwlmgo5qjuros" path="res://assets/palhaco_3.png" id="2_5plwb"]
 
 [resource]
 script = ExtResource("1_7b7dg")
+character_name = "Ranged"
+sprite_texture = ExtResource("2_5plwb")
 metadata/_custom_type_script = "uid://667grtldbf7d"
