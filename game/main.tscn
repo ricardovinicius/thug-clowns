@@ -64,6 +64,7 @@ offset_right = 52.0
 offset_bottom = 171.0
 
 [node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("8_kek77")]
+visible = false
 position = Vector2(175, 87)
 tilemap = NodePath("../TileMapLayer")
 stats = ExtResource("9_kek77")

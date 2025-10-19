@@ -32,7 +32,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_xorin")
 }],
 "loop": true,
-"name": &"default",
+"name": &"idle",
 "speed": 5.0
 }]
 
@@ -51,3 +51,6 @@ texture = ExtResource("2_jaubn")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_5irkf")
+animation = &"idle"
+autoplay = "idle"
+speed_scale = 0.6

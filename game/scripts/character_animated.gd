@@ -47,7 +47,6 @@ func move(path: PackedVector2Array) -> void:
 	can_use_move_action = false
 	print("Character moved. Move action used.")
 
-
 func attack(target: Character) -> void:
 	if !can_use_standard_action:
 		push_warning("Standard action already used this turn!")
@@ -121,6 +120,8 @@ func move_along_path(path: PackedVector2Array) -> void:
 			
 		var duration = distance / move_speed
 		
+		sprite.play("move")
+
 		# 4. Adicione a animação à FILA (ela só rodará após a anterior)
 		current_tween.tween_property(self, "global_position", target_position, duration)
 		
