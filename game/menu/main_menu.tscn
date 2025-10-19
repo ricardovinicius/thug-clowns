@@ -1,0 +1,86 @@
+[gd_scene load_steps=5 format=3 uid="uid://ion8b43qbqnm"]
+
+[ext_resource type="FontFile" uid="uid://cekdd800l6al2" path="res://menu/GrapeSoda.ttf" id="1_chmv6"]
+[ext_resource type="Script" uid="uid://da48uhmq34bdj" path="res://menu/main_menu.gd" id="1_f5okj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f5okj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5w3e"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.23700002)
+shadow_size = 5
+shadow_offset = Vector2(0, 3.5)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f5okj")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_f5okj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -32.5
+offset_right = 57.0
+offset_bottom = 32.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="Jogar" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0.017732333, 0.01773242, 0.017732358, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_o5w3e")
+text = "Jogar"
+
+[node name="Sair" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_colors/font_color = Color(0.017732333, 0.01773242, 0.017732358, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_o5w3e")
+text = "Sair"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -127.0
+offset_right = 127.0
+offset_bottom = 66.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.0142752165, 0.014275218, 0.014275218, 0.89411765)
+theme_override_constants/shadow_offset_y = 7
+theme_override_fonts/font = ExtResource("1_chmv6")
+theme_override_font_sizes/font_size = 40
+text = "Thug Clowns"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/Jogar" to="." method="_on_jogar_pressed"]
+[connection signal="pressed" from="VBoxContainer/Sair" to="." method="_on_sair_pressed"]
