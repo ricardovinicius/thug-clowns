@@ -1,7 +1,14 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=3 format=3 uid="uid://b2ldyycuwp1bu"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=6 format=3 uid="uid://b2ldyycuwp1bu"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_8ni3u"]
+[ext_resource type="Script" uid="uid://bni15t6gyuk4j" path="res://scripts/special_ability_impl/DebuffTargetBleedAbility.gd" id="2_4sf5a"]
 [ext_resource type="Texture2D" uid="uid://c0hxrgb1o8mnt" path="res://assets/palhaco_1.png" id="2_u0uta"]
+[ext_resource type="PackedScene" uid="uid://dagpj8w8jhtud" path="res://effect_scenes/BleedEffect.tscn" id="2_x7blc"]
+
+[sub_resource type="Resource" id="Resource_x7blc"]
+script = ExtResource("2_4sf5a")
+effect_scene = ExtResource("2_x7blc")
+metadata/_custom_type_script = "uid://bni15t6gyuk4j"
 
 [resource]
 script = ExtResource("1_8ni3u")
@@ -10,4 +17,5 @@ attack_power = 5
 movement_range = 5
 primary_attack_range = 5
 sprite_texture = ExtResource("2_u0uta")
+special_ability = SubResource("Resource_x7blc")
 metadata/_custom_type_script = "uid://667grtldbf7d"

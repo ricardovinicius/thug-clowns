@@ -13,3 +13,6 @@ class_name CharacterStats
 @export_group("Visuals")
 @export var sprite_texture: Texture2D
 @export var player_color: Color = Color.WHITE
+
+@export_group("Abilities")
+@export var special_ability: SpecialAbility

@@ -36,6 +36,7 @@ var can_use_standard_action: bool = true:
 @onready var selection_visual = $SelectionCircle
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var health_label: Label = $HealthLabel
+@onready var status_effect_container: Node = $StatusEffectContainer
 
 func select():
 	selection_visual.visible = true
@@ -54,8 +55,21 @@ func apply_stats(stats_to_apply: CharacterStats) -> void:
 
 var has_acted_this_round: bool = false
 
+func apply_status_effect(effect_instance: StatusEffect) -> void:
+	status_effect_container.add_child(effect_instance)
+	effect_instance.on_apply(self)
+	print("Applied status effect: %s" % effect_instance.effect_name)
+
+func _activate_status_effects() -> void:
+	for effect in status_effect_container.get_children():
+		if effect is StatusEffect:
+			effect.on_activation()
+			effect.on_round_tick()
+			print("Activated status effect: %s" % effect.effect_name)
+
 func on_round_start() -> void:
 	active_for_round()
+	_activate_status_effects()
 	print("Character's round started. Actions reset.")
 
 func inactive_for_round() -> void:
@@ -170,16 +184,37 @@ func move_along_path(path: PackedVector2Array) -> void:
 		emit_signal("move_finished")
 	)
 
+func _activate_damage_modifiers(amount: int) -> int:
+	var modified_amount = amount
+	
+	for effect in status_effect_container.get_children():
+		if effect is StatusEffect:
+			modified_amount = effect.modify_damage_taken(modified_amount)
+			print("Modified damage by effect %s. New damage: %d" % [effect.effect_name, modified_amount])
+	
+	return modified_amount
+
 func take_damage(amount: int) -> void:
-	current_health -= amount
-	print("Character took %d damage. Current health: %d" % [amount, current_health])
+	var modified_damage = _activate_damage_modifiers(amount)
+
+	current_health -= modified_damage
+	print("Character took %d damage. Current health: %d" % [modified_damage, current_health])
 	if current_health <= 0:
 		die()
+
+func _clean_effects_on_death() -> void:
+	for effect in status_effect_container.get_children():
+		if effect is StatusEffect:
+			effect.on_removed()
+			effect.queue_free()
+			print("Removed status effect on death: %s" % effect.effect_name)
 
 func die() -> void:
 	print("Character %s has died." % stats.character_name)
 
 	died.emit(self)
+
+	_clean_effects_on_death()
 	
 	if player_id == 1:
 		remove_from_group("Player1Units")
@@ -187,6 +222,19 @@ func die() -> void:
 		remove_from_group("Player2Units")
 
 	queue_free()
+
+func use_special_ability(targets: Array) -> void:
+	if !can_use_standard_action:
+		push_warning("Standard action already used this turn!")
+		return
+
+	if stats.special_ability == null:
+		push_warning("No special ability assigned to character %s!" % stats.character_name)
+		return
+
+	stats.special_ability.execute(self, targets)
+	can_use_standard_action = false
+	print("Character %s used special ability %s on target %s." % [stats.character_name, stats.special_ability.ability_name, targets[0].stats.character_name])
 
 func _update_health_label() -> void:
 	health_label.text = "%d/%d" % [current_health, stats.max_health]

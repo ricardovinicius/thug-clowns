@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bn6of330hw4pq"]
+
+[ext_resource type="Script" uid="uid://i8ly3njixrdh" path="res://scripts/status_effect_impl/ResistanceEffect.gd" id="1_8aylq"]
+
+[node name="ResistanceEffect" type="Node"]
+script = ExtResource("1_8aylq")
