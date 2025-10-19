@@ -20,6 +20,7 @@ var current_health: int:
 		_update_health_label()
 
 signal actions_exhausted
+signal died(character)
 
 var can_use_move_action: bool = true:
 	set(value):
@@ -175,7 +176,14 @@ func take_damage(amount: int) -> void:
 
 func die() -> void:
 	print("Character %s has died." % stats.character_name)
-	# EMITIR SINAL DE MORTE AQUI, SE NECESSÁRIO
+
+	died.emit(self)
+	
+	if player_id == 1:
+		remove_from_group("Player1Units")
+	else:
+		remove_from_group("Player2Units")
+
 	queue_free()
 
 func _update_health_label() -> void:

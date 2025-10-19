@@ -64,6 +64,7 @@ mid_scene = ExtResource("7_kek77")
 [node name="CanvasLayer" type="CanvasLayer" parent="GameManager"]
 
 [node name="ActionUI_P1" type="Panel" parent="GameManager/CanvasLayer"]
+visible = false
 offset_left = 22.0
 offset_top = 213.0
 offset_right = 115.0
@@ -84,6 +85,7 @@ offset_bottom = 34.0
 icon = ExtResource("9_efxa6")
 
 [node name="ActionUI_P2" type="Panel" parent="GameManager/CanvasLayer"]
+visible = false
 offset_left = 345.0
 offset_top = 10.0
 offset_right = 438.0

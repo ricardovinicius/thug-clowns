@@ -185,6 +185,13 @@ func start_new_round():
 	start_player_turn()
 
 func start_player_turn():
+	print("Starting Player %d's turn." % current_player_turn)
+	var group_name = "Player%dUnits" % current_player_turn
+	if get_tree().get_nodes_in_group(group_name).size() == 0:
+		print("Player %d has no units left to act." % current_player_turn)
+		end_player_turn()
+		return
+
 	if check_if_all_characters_acted_by_player(current_player_turn):
 		if current_player_turn == 2:
 			start_new_round()
@@ -380,6 +387,8 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 
+	new_troop.died.connect(_on_character_died)
+
 	add_child(new_troop)
 	
 	new_troop.global_position = tilemap.map_to_local(map_coords)
@@ -452,3 +461,25 @@ func _on_run_button_pressed() -> void:
 
 	print("Run action initiated for character %s." % selected_character.name)
 	selected_character.run()
+
+func _on_character_died(character: Node2D) -> void:
+	print("Character %s has died. Updating occupied tiles." % character.name)
+	
+	var char_grid_pos = tilemap.local_to_map(character.global_position)
+	if occupied_tiles.has(char_grid_pos):
+		occupied_tiles.erase(char_grid_pos)
+		tilemap.astargrid.set_point_solid(char_grid_pos, false)
+
+	if character == selected_character:
+		deselect_character()
+	
+	call_deferred("_check_game_over", character.player_id)
+
+func _check_game_over(dead_player_id: int) -> void:
+	var remaining_units = get_tree().get_nodes_in_group("Player%dUnits" % dead_player_id)
+	if remaining_units.size() == 0:
+		print("Player %d has no remaining units. Player %d wins!" % [dead_player_id, 3 - dead_player_id])
+
+		turn_label.text = "Player %d Wins!" % (3 - dead_player_id)
+		update_turn_ui()
+		get_tree().paused = true
