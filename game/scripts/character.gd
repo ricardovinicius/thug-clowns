@@ -12,9 +12,12 @@ class_name Character
 
 signal move_finished
 
-
 var move_speed: float = 100.0
 var current_tween: Tween = null
+var current_health: int:
+	set(value):
+		current_health = value
+		_update_health_label()
 
 signal actions_exhausted
 
@@ -31,6 +34,7 @@ var can_use_standard_action: bool = true:
 
 @onready var selection_visual = $SelectionCircle
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var health_label: Label = $HealthLabel
 
 func select():
 	selection_visual.visible = true
@@ -44,6 +48,8 @@ func apply_stats(stats_to_apply: CharacterStats) -> void:
 		print("Applied sprite texture for %s" % stats_to_apply.character_name)
 	
 	movement_range = stats_to_apply.movement_range
+	current_health = stats_to_apply.max_health
+	_update_health_label()
 
 var has_acted_this_round: bool = false
 
@@ -157,3 +163,6 @@ func move_along_path(path: PackedVector2Array) -> void:
 		print("Move to position finished")
 		emit_signal("move_finished")
 	)
+
+func _update_health_label() -> void:
+	health_label.text = "%d/%d" % [current_health, stats.max_health]

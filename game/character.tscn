@@ -11,8 +11,6 @@ collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_onrkg")
 player_id = 1
-p1_color = null
-p2_color = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_272bh")
@@ -23,3 +21,13 @@ texture = ExtResource("2_i3pqv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 offset = Vector2(0, -8)
+
+[node name="HealthLabel" type="Label" parent="."]
+texture_filter = 1
+offset_left = -19.0
+offset_top = -30.0
+offset_right = 20.0
+offset_bottom = -16.0
+theme_override_font_sizes/font_size = 10
+text = "100/100"
+horizontal_alignment = 1
