@@ -17,6 +17,21 @@ func enter():
 	var special_ability_button = ui_to_show.get_node("SpecialButton")
 	var run_button = ui_to_show.get_node("RunButton")
 
+	special_ability_button.icon = character.stats.special_ability_button_icon
+
+	var icon_display = ui_to_show.get_node("CharacterIcon") as TextureRect
+
+	if icon_display:
+		icon_display.texture = character.stats.character_icon
+	else:
+		push_warning("CharacterIcon node not found in action UI.")
+
+	var char_name_label = ui_to_show.get_node("CharacterName") as Label
+	if char_name_label:
+		char_name_label.text = character.stats.character_name
+	else:
+		push_warning("CharacterName node not found in action UI.")
+
 	if character.can_use_standard_action:
 		attack_button.disabled = false
 		special_ability_button.disabled = false

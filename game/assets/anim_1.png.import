@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://df0ao1sbeoueo"
-path="res://.godot/imported/palhaco_1_animation.png-94bbdc180f5e5979a11984450e34dae5.ctex"
+uid="uid://d4iud7trq500i"
+path="res://.godot/imported/anim_1.png-bf3bd9d5ccb17da87926250b7739c53b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/palhaco_1_animation.png"
-dest_files=["res://.godot/imported/palhaco_1_animation.png-94bbdc180f5e5979a11984450e34dae5.ctex"]
+source_file="res://assets/anim_1.png"
+dest_files=["res://.godot/imported/anim_1.png-bf3bd9d5ccb17da87926250b7739c53b.ctex"]
 
 [params]
 

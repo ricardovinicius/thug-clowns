@@ -4,9 +4,20 @@ extends GameState
 
 func enter():
 	print("Entering CharacterMovingState")
+	var character = controller.selected_character
+	
+	if character and character.sprite:
+		character.sprite.play("walking")
 
 func exit():
 	print("Exiting CharacterMovingState")
+	var character = controller.selected_character
+
+	if character and character.sprite:
+		character.sprite.stop()
+		character.sprite.play("idle")
+		
+
 
 func process(delta: float):
 	pass

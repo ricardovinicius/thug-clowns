@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://766jsikflxl"]
 
 [ext_resource type="Script" uid="uid://dav876symkgiv" path="res://scripts/character.gd" id="1_onrkg"]
-[ext_resource type="Texture2D" uid="uid://b8iukve8mjkal" path="res://assets/circle.png" id="2_i3pqv"]
+[ext_resource type="Texture2D" uid="uid://dsv0h4igthlcu" path="res://assets/seta.png" id="2_pjt0s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_272bh"]
 size = Vector2(22, 20)
@@ -17,10 +17,8 @@ shape = SubResource("RectangleShape2D_272bh")
 
 [node name="SelectionCircle" type="Sprite2D" parent="."]
 visible = false
-texture = ExtResource("2_i3pqv")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-offset = Vector2(0, -8)
+position = Vector2(0, -42)
+texture = ExtResource("2_pjt0s")
 
 [node name="HealthLabel" type="Label" parent="."]
 texture_filter = 1
@@ -33,3 +31,7 @@ text = "100/100"
 horizontal_alignment = 1
 
 [node name="StatusEffectContainer" type="Node" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+animation = &""
+offset = Vector2(0, -8)

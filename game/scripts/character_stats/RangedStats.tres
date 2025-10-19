@@ -1,11 +1,20 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=2 format=3 uid="uid://6qk68om1s6h4"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=6 format=3 uid="uid://6qk68om1s6h4"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_7b7dg"]
+[ext_resource type="Texture2D" uid="uid://c2clxxk7e0lti" path="res://assets/char_icon_3.png" id="1_oa6qx"]
+[ext_resource type="SpriteFrames" uid="uid://dpwqrdp5762pr" path="res://animations/palhaco_3.tres" id="1_vnxqg"]
+[ext_resource type="SpriteFrames" uid="uid://b3fb657a0sovw" path="res://animations/palhaco_3_p2.tres" id="2_slmox"]
+[ext_resource type="Texture2D" uid="uid://c2srpdf7n2h0u" path="res://assets/special_2.png" id="3_slmox"]
 
 [resource]
 script = ExtResource("1_7b7dg")
 character_name = "Ranged"
+max_health = 40
 attack_power = 5
-movement_range = 5
-primary_attack_range = 5
+movement_range = 2
+primary_attack_range = 4
+animations_p1 = ExtResource("1_vnxqg")
+animations_p2 = ExtResource("2_slmox")
+character_icon = ExtResource("1_oa6qx")
+special_ability_button_icon = ExtResource("3_slmox")
 metadata/_custom_type_script = "uid://667grtldbf7d"

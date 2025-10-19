@@ -34,7 +34,7 @@ var can_use_standard_action: bool = true:
 			emit_signal("actions_exhausted")
 
 @onready var selection_visual = $SelectionCircle
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_label: Label = $HealthLabel
 @onready var status_effect_container: Node = $StatusEffectContainer
 
@@ -45,9 +45,13 @@ func deselect():
 	selection_visual.visible = false
 
 func apply_stats(stats_to_apply: CharacterStats) -> void:
-	if sprite and stats_to_apply.sprite_texture:
-		sprite.texture = stats_to_apply.sprite_texture
-		print("Applied sprite texture for %s" % stats_to_apply.character_name)
+	if sprite:
+		if player_id == 1:
+			sprite.frames = stats_to_apply.animations_p1
+		else:
+			sprite.frames = stats_to_apply.animations_p2
+			sprite.flip_h = true
+		sprite.play("idle")
 	
 	movement_range = stats_to_apply.movement_range
 	current_health = stats_to_apply.max_health
@@ -99,6 +103,8 @@ func attack(target: Node2D) -> void:
 	if !can_use_standard_action:
 		push_warning("Standard action already used this turn!")
 		return
+	
+	sprite.play("attack")
 
 	if target and target.has_method("take_damage"):
 		target.take_damage(stats.attack_power)

@@ -2,16 +2,16 @@ class_name SelectingSpecialTargetState
 extends GameState
 
 func enter():
-    controller.show_special_range()
+	controller.show_special_range()
 
 func exit():
-    controller.clear_highlight()
+	controller.clear_highlight()
 
 func process(delta: float):
-    pass
+	pass
 
 func handle_input(event: InputEvent):
-    pass
+	pass
 
 func get_ui_text() -> String:
-    return "Select a target for the special ability"
+	return "Select a target for the special ability"

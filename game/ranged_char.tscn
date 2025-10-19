@@ -7,8 +7,6 @@
 [node name="Player" instance=ExtResource("1_m6cbc")]
 player_id = 0
 stats = ExtResource("2_guhp7")
-p1_color = Color(1, 0, 0, 1)
-p2_color = Color(0, 0, 1, 1)
 
 [node name="Sprite2D" parent="." index="2"]
 texture = ExtResource("3_guhp7")

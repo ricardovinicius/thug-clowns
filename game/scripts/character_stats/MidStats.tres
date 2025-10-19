@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=6 format=3 uid="uid://b2ldyycuwp1bu"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=9 format=3 uid="uid://b2ldyycuwp1bu"]
 
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_8ni3u"]
+[ext_resource type="SpriteFrames" uid="uid://c46yk7wfflyo3" path="res://animations/palhaco_1.tres" id="1_hds6u"]
+[ext_resource type="Texture2D" uid="uid://b4rvruf2pmjc2" path="res://assets/char_icon_1.png" id="1_lgbw5"]
 [ext_resource type="Script" uid="uid://bni15t6gyuk4j" path="res://scripts/special_ability_impl/DebuffTargetBleedAbility.gd" id="2_4sf5a"]
-[ext_resource type="Texture2D" uid="uid://c0hxrgb1o8mnt" path="res://assets/palhaco_1.png" id="2_u0uta"]
+[ext_resource type="SpriteFrames" uid="uid://bt1vmu388uk5g" path="res://animations/palhaco_1_p2.tres" id="2_781io"]
 [ext_resource type="PackedScene" uid="uid://dagpj8w8jhtud" path="res://effect_scenes/BleedEffect.tscn" id="2_x7blc"]
+[ext_resource type="Texture2D" uid="uid://bvbmfayc22efd" path="res://assets/special_3.png" id="5_hds6u"]
 
 [sub_resource type="Resource" id="Resource_x7blc"]
 script = ExtResource("2_4sf5a")
@@ -13,9 +16,13 @@ metadata/_custom_type_script = "uid://bni15t6gyuk4j"
 [resource]
 script = ExtResource("1_8ni3u")
 character_name = "Mid"
+max_health = 40
 attack_power = 5
-movement_range = 5
-primary_attack_range = 5
-sprite_texture = ExtResource("2_u0uta")
+movement_range = 3
+primary_attack_range = 1
+animations_p1 = ExtResource("1_hds6u")
+animations_p2 = ExtResource("2_781io")
+character_icon = ExtResource("1_lgbw5")
+special_ability_button_icon = ExtResource("5_hds6u")
 special_ability = SubResource("Resource_x7blc")
 metadata/_custom_type_script = "uid://667grtldbf7d"

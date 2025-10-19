@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="CharacterStats" load_steps=6 format=3 uid="uid://tdcvwofy7nhk"]
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=9 format=3 uid="uid://tdcvwofy7nhk"]
 
+[ext_resource type="SpriteFrames" uid="uid://dv8fe6b2bj735" path="res://animations/palhaco_2.tres" id="1_2b171"]
+[ext_resource type="Texture2D" uid="uid://bncx1rvmaald" path="res://assets/char_icon_2.png" id="1_eabbj"]
 [ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_ijko2"]
-[ext_resource type="Texture2D" uid="uid://bcta1cecfjbaj" path="res://assets/palhaco_2.png" id="2_03v1f"]
+[ext_resource type="SpriteFrames" uid="uid://bo6qnu0h8m40n" path="res://animations/palhaco_2_p2.tres" id="2_26wkp"]
 [ext_resource type="PackedScene" uid="uid://bn6of330hw4pq" path="res://effect_scenes/ResistanceEffect.tscn" id="2_a38ho"]
 [ext_resource type="Script" uid="uid://c4qqd8m6fb8b3" path="res://scripts/special_ability_impl/BuffSelfResAbility.gd" id="2_r7a55"]
+[ext_resource type="Texture2D" uid="uid://dtf0va3rsvjsv" path="res://assets/special_1.png" id="5_2b171"]
 
 [sub_resource type="Resource" id="Resource_a38ho"]
 script = ExtResource("2_r7a55")
@@ -14,10 +17,13 @@ metadata/_custom_type_script = "uid://c4qqd8m6fb8b3"
 [resource]
 script = ExtResource("1_ijko2")
 character_name = "Tank"
-max_health = 2
+max_health = 50
 attack_power = 5
-movement_range = 5
-primary_attack_range = 5
-sprite_texture = ExtResource("2_03v1f")
+movement_range = 3
+primary_attack_range = 1
+animations_p1 = ExtResource("1_2b171")
+animations_p2 = ExtResource("2_26wkp")
+character_icon = ExtResource("1_eabbj")
+special_ability_button_icon = ExtResource("5_2b171")
 special_ability = SubResource("Resource_a38ho")
 metadata/_custom_type_script = "uid://667grtldbf7d"

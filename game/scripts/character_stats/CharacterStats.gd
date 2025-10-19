@@ -11,8 +11,11 @@ class_name CharacterStats
 @export var secondary_attack_range: int
 
 @export_group("Visuals")
-@export var sprite_texture: Texture2D
+@export var animations_p1: SpriteFrames
+@export var animations_p2: SpriteFrames
+@export var character_icon: Texture2D
 @export var player_color: Color = Color.WHITE
+@export var special_ability_button_icon: Texture2D
 
 @export_group("Abilities")
 @export var special_ability: SpecialAbility

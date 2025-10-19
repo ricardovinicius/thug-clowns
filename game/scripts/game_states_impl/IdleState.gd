@@ -2,16 +2,16 @@ class_name IdleState
 extends GameState
 
 func enter():
-    pass
+	pass
 
 func exit():
-    pass
-    
+	pass
+
 func process(delta: float):
-    pass
+	pass
 
 func handle_input(event: InputEvent):
-    pass
+	pass
 
 func get_ui_text() -> String:
-    return ""
+	return ""

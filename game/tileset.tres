@@ -1,12 +1,12 @@
 [gd_resource type="TileSet" load_steps=9 format=3 uid="uid://ci3jneu422ekh"]
 
-[ext_resource type="Texture2D" uid="uid://bi8baxitkns5v" path="res://assets/test_tile_2.png" id="1_14fb3"]
+[ext_resource type="Texture2D" uid="uid://crt750ihli6yk" path="res://assets/empty_tile.png" id="1_p0366"]
 [ext_resource type="Texture2D" uid="uid://bua28ygjm6a11" path="res://assets/test_tile_1.png" id="2_p0366"]
-[ext_resource type="Texture2D" uid="uid://bdvh2t3yjtilb" path="res://assets/test_tile_3.png" id="3_hobn4"]
+[ext_resource type="Texture2D" uid="uid://c35hogfi15tdr" path="res://assets/highlight_tile_4.png" id="3_p0366"]
 [ext_resource type="Texture2D" uid="uid://bimfvdod63eb0" path="res://assets/test_tile_4.png" id="4_p0366"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0xm2m"]
-texture = ExtResource("1_14fb3")
+texture = ExtResource("1_p0366")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, -8)
@@ -22,7 +22,7 @@ texture_region_size = Vector2i(32, 32)
 0:1/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kek77"]
-texture = ExtResource("3_hobn4")
+texture = ExtResource("3_p0366")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, -8)

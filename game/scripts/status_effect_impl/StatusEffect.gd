@@ -23,5 +23,5 @@ func on_round_tick():
         if duration_in_rounds <= 0:
             queue_free()
 
-func modifyy_damage_taken(damage: int) -> int:
+func modify_damage_taken(damage: int) -> int:
     return damage
