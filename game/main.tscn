@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dpdqu0w8xekop" path="res://tank_char.tscn" id="5_272bh"]
 [ext_resource type="PackedScene" uid="uid://b6ksmm8rop6ya" path="res://ranged_char.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://4cde370j31hb" path="res://mid_char.tscn" id="7_kek77"]
-[ext_resource type="Texture2D" uid="uid://2o45k7j3nw14" path="res://assets/attack.png" id="8_4c57u"]
+[ext_resource type="Texture2D" uid="uid://bhg227eocr5jy" path="res://assets/attack.png" id="8_4c57u"]
 [ext_resource type="PackedScene" uid="uid://3alpsgfymeb7" path="res://test_char.tscn" id="8_kek77"]
 [ext_resource type="Texture2D" uid="uid://veep1e4vc2bm" path="res://assets/run.png" id="9_efxa6"]
 [ext_resource type="Resource" uid="uid://osp7qj5xbrxt" path="res://scripts/character_stats/TestStats.tres" id="9_kek77"]
