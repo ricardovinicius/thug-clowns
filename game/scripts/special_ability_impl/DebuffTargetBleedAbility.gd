@@ -3,6 +3,7 @@ extends SpecialAbility
 class_name DebuffTargetBleedAbility
 
 # @export var bleed_effect: StatusEffect
+@export var effect_scene: PackedScene
 
 func _init():
     targeting_type = TargetingType.ENEMY
@@ -17,7 +18,9 @@ func execute(owner: Character, targets: Array) -> void:
 
     var target = targets[0] as Character
     # target.apply_status_effect(bleed_effect.new())
+    var effect_instance = effect_scene.instantiate() as StatusEffect
 
     # Simulação:
+    target.apply_status_effect(effect_instance)
     target.modulate = Color.RED
     print("%s está sangrando!" % target.stats.character_name)

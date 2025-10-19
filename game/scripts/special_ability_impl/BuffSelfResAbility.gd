@@ -4,6 +4,7 @@ class_name BuffSelfAbility
 
 # Você pode exportar o efeito que esta habilidade aplica
 # @export var resistance_buff: StatusEffect 
+@export var effect_scene: PackedScene
 
 func _init():
     # Configura os valores padrão para esta habilidade
@@ -17,6 +18,8 @@ func execute(owner: Character, targets: Array) -> void:
 
     # 'owner' é o único alvo em 'targets'
     # owner.apply_status_effect(resistance_buff.new())
+    var effect_instance = effect_scene.instantiate() as StatusEffect
+    owner.apply_status_effect(effect_instance)
 
     # Por enquanto (sem sistema de status), vamos simular:
     owner.modulate = Color.GOLD # Deixa o personagem dourado
