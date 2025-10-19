@@ -92,10 +92,12 @@ func attack(target: Node2D) -> void:
 	can_use_standard_action = false
 	print("Character attacked. Standard action used.")
 
-func run() -> void:
+func run(path: PackedVector2Array) -> void:
 	if !can_use_standard_action:
 		push_warning("Standard action already used this turn!")
 		return
+
+	move_along_path(path)
 	
 	can_use_standard_action = false
 	print("Character is running. Run action used.")

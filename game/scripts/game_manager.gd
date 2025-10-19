@@ -37,6 +37,7 @@ enum State {
 	IDLE,
 	CHARACTER_SELECTED,
 	SELECTING_ATTACK_TARGET,
+	SELECTING_RUN_TARGET,
 	CHARACTER_MOVING
 }
 
@@ -66,7 +67,8 @@ func _ready() -> void:
 		State.IDLE: IdleState.new(),
 		State.CHARACTER_MOVING: CharacterMovingState.new(),
 		State.CHARACTER_SELECTED: CharacterSelectState.new(),
-		State.SELECTING_ATTACK_TARGET: SelectingAttackTargetState.new()
+		State.SELECTING_ATTACK_TARGET: SelectingAttackTargetState.new(),
+		State.SELECTING_RUN_TARGET: SelectingRunTargetState.new()
 	}
 
 	for state in states.values():
@@ -116,6 +118,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				handle_move_command(event.position)
 			elif current_state_plus is SelectingAttackTargetState:
 				handle_attack_command(hovered_grid_pos)
+			elif current_state_plus is SelectingRunTargetState:
+				handle_run_command(event.position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			if current_state_plus is CharacterSelectState:
 				deselect_character()
@@ -305,6 +309,43 @@ func handle_attack_command(target_grid_pos: Vector2i) -> void:
 	
 	deselect_character()
 
+func handle_run_command(_mouse_position: Vector2) -> void:
+	if selected_character == null:
+		return
+	
+	if selected_character == null:
+		return
+
+	var player_grid_pos = tilemap.local_to_map(selected_character.global_position)
+	var target_grid_pos = hovered_grid_pos
+	
+	var path: PackedVector2Array = tilemap.astargrid.get_point_path(player_grid_pos, target_grid_pos)
+	
+	if path.is_empty():
+		print("Nenhum caminho disponivel.")
+		return
+	
+	var path_cost = path.size() - 1
+	
+	if path_cost == 0:
+		deselect_character()
+		return
+	
+	var max_move = selected_character.get("movement_range")
+	
+	if path_cost > max_move:
+		print("Nao e possivel ir para la")
+		return
+	
+	if occupied_tiles.has(path[-1]):
+		print("Posicao final ja ocupada.")
+		return
+	
+	update_tile_occupation(player_grid_pos, target_grid_pos, selected_character)
+	
+	transition_to(State.CHARACTER_MOVING)
+	selected_character.run(path)
+
 func deselect_character() -> void:
 	clear_highlight()
 	
@@ -460,7 +501,7 @@ func _on_run_button_pressed() -> void:
 		return
 
 	print("Run action initiated for character %s." % selected_character.name)
-	selected_character.run()
+	transition_to(State.SELECTING_RUN_TARGET)
 
 func _on_character_died(character: Node2D) -> void:
 	print("Character %s has died. Updating occupied tiles." % character.name)
