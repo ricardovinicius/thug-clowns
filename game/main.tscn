@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=14 format=4 uid="uid://wuov3qqkqij8"]
 
 [ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://byaqn0ykowfe7" path="res://scripts/tile_map_layer.gd" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://df0knudj3efk" path="res://assets/highlight_tile.png" id="3_lquwl"]
+[ext_resource type="TileSet" uid="uid://b1e4hjm8ukcja" path="res://tileset_highlight.tres" id="3_dg77c"]
+[ext_resource type="Texture2D" uid="uid://df0knudj3efk" path="res://assets/highlight_tile_1.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dpdqu0w8xekop" path="res://tank_char.tscn" id="5_272bh"]
 [ext_resource type="PackedScene" uid="uid://b6ksmm8rop6ya" path="res://ranged_char.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://4cde370j31hb" path="res://mid_char.tscn" id="7_kek77"]
@@ -38,7 +39,9 @@ tile_map_data = PackedByteArray("AAAOAPz/AgAAAAAAAAAOAP3/AgAAAAAAAAAOAP7/AgAAAAA
 tile_set = ExtResource("1_1bvp3")
 
 [node name="HighlightLayer" type="TileMapLayer" parent="."]
-tile_set = ExtResource("1_1bvp3")
+z_as_relative = false
+y_sort_enabled = true
+tile_set = ExtResource("3_dg77c")
 
 [node name="Selector" type="Sprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_1bvp3")

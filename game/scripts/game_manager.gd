@@ -15,8 +15,11 @@ extends Node2D
 @onready var action_ui_p1 = $CanvasLayer/ActionUI_P1
 @onready var action_ui_p2 = $CanvasLayer/ActionUI_P2
 
-const HIGHLIGHT_SOURCE_ID = 0
+const HIGHLIGHT_SOURCE_ID = 1
 const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
+
+const ATTACK_HIGHLIGHT_SOURCE_ID = 0 # Mesmo TileSet
+const ATTACK_HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
 
 var p1_troops_to_deploy: Array[PackedScene] = []
 var p2_troops_to_deploy: Array[PackedScene] = []
@@ -33,6 +36,7 @@ enum State {
 	DEPLOY_P2,
 	IDLE,
 	CHARACTER_SELECTED,
+	SELECTING_ATTACK_TARGET,
 	CHARACTER_MOVING
 }
 
@@ -62,6 +66,7 @@ func _ready() -> void:
 		State.IDLE: IdleState.new(),
 		State.CHARACTER_MOVING: CharacterMovingState.new(),
 		State.CHARACTER_SELECTED: CharacterSelectState.new(),
+		State.SELECTING_ATTACK_TARGET: SelectingAttackTargetState.new()
 	}
 
 	for state in states.values():
@@ -109,16 +114,18 @@ func _unhandled_input(event: InputEvent) -> void:
 				handle_character_selection(event.position)
 			elif current_state_plus is CharacterSelectState:
 				handle_move_command(event.position)
+			elif current_state_plus is SelectingAttackTargetState:
+				handle_attack_command(hovered_grid_pos)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			if current_state_plus is CharacterSelectState:
 				deselect_character()
 
-func clear_movement_range() -> void:
+func clear_highlight() -> void:
 	if highlight_layer:
 		highlight_layer.clear()
 
 func show_movement_range(character: Node2D) -> void:
-	clear_movement_range()
+	clear_highlight()
 	
 	var start_pos: Vector2i = tilemap.local_to_map(character.global_position)
 	var max_range: int = character.get("movement_range")
@@ -150,6 +157,20 @@ func show_movement_range(character: Node2D) -> void:
 		
 		for tile in valid_tiles:
 			highlight_layer.set_cell(tile, HIGHLIGHT_SOURCE_ID, HIGHLIGHT_ATLAS_COORDS)
+
+func show_attack_range() -> void:
+	clear_highlight()
+	
+	var max_range = selected_character.stats.primary_attack_range
+	var start_pos: Vector2i = tilemap.local_to_map(selected_character.global_position)
+
+	for x in range(start_pos.x - max_range, start_pos.x + max_range + 1):
+		for y in range(start_pos.y - max_range, start_pos.x + max_range + 1):
+			var target_pos = Vector2i(x, y)
+			
+			var distance = start_pos.distance_to(target_pos)
+			if distance <= max_range:
+				highlight_layer.set_cell(target_pos, ATTACK_HIGHLIGHT_SOURCE_ID, ATTACK_HIGHLIGHT_ATLAS_COORDS)
 
 func start_new_round():
 	current_round += 1
@@ -249,11 +270,40 @@ func handle_move_command(_mouse_position: Vector2) -> void:
 	transition_to(State.CHARACTER_MOVING)
 	selected_character.move(path)
 
+func handle_attack_command(target_grid_pos: Vector2i) -> void:
+	if selected_character == null:
+		return
+
+	if !occupied_tiles.has(target_grid_pos):
+		print("No target at selected position.")
+		deselect_character()
+		return
+
+	var target_character = occupied_tiles[target_grid_pos]
+
+	if target_character.get("player_id") == selected_character.get("player_id"):
+		print("Cannot attack friendly unit.")
+		return
+	
+	var start_pos: Vector2i = tilemap.local_to_map(selected_character.global_position)
+	var distance = start_pos.distance_to(target_grid_pos)
+	var max_range = selected_character.stats.primary_attack_range
+	
+	if distance > max_range:
+		print("Target out of range.")
+		return
+	
+	print("Attacking target at %s" % str(target_grid_pos))
+	selected_character.attack(target_character)
+	
+	deselect_character()
+
 func deselect_character() -> void:
-	clear_movement_range()
+	clear_highlight()
 	
 	if selected_character:
 		if selected_character.get("can_use_standard_action") and !selected_character.get("can_use_move_action"):
+			transition_to(State.CHARACTER_SELECTED)
 			return
 
 		if selected_character.move_finished.is_connected(_on_character_move_finished):
@@ -387,7 +437,8 @@ func _on_attack_button_pressed() -> void:
 		return
 
 	print("Attack action initiated for character %s." % selected_character.name)
-	selected_character.attack()
+	print("Transitioning to SelectingAttackTargetState.")
+	transition_to(State.SELECTING_ATTACK_TARGET)
 
 
 func _on_run_button_pressed() -> void:

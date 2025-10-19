@@ -21,7 +21,7 @@ func enter():
 func exit():
 	var ui_to_hide = controller.action_ui_p1 if controller.current_player_turn == 1 else controller.action_ui_p2
 	ui_to_hide.hide()
-	controller.clear_movement_range()
+	controller.clear_highlight()
 
 func process(delta: float):
 	pass

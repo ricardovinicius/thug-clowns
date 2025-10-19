@@ -9,5 +9,6 @@ character_name = "Tank"
 max_health = 50
 attack_power = 5
 movement_range = 5
+primary_attack_range = 1
 sprite_texture = ExtResource("2_03v1f")
 metadata/_custom_type_script = "uid://667grtldbf7d"

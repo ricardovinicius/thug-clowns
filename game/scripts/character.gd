@@ -80,10 +80,13 @@ func move(path: PackedVector2Array) -> void:
 	print("Character moved. Move action used.")
 
 
-func attack() -> void:
+func attack(target: Node2D) -> void:
 	if !can_use_standard_action:
 		push_warning("Standard action already used this turn!")
 		return
+
+	if target and target.has_method("take_damage"):
+		target.take_damage(stats.attack_power)
 	
 	can_use_standard_action = false
 	print("Character attacked. Standard action used.")
@@ -163,6 +166,17 @@ func move_along_path(path: PackedVector2Array) -> void:
 		print("Move to position finished")
 		emit_signal("move_finished")
 	)
+
+func take_damage(amount: int) -> void:
+	current_health -= amount
+	print("Character took %d damage. Current health: %d" % [amount, current_health])
+	if current_health <= 0:
+		die()
+
+func die() -> void:
+	print("Character %s has died." % stats.character_name)
+	# EMITIR SINAL DE MORTE AQUI, SE NECESSÁRIO
+	queue_free()
 
 func _update_health_label() -> void:
 	health_label.text = "%d/%d" % [current_health, stats.max_health]
