@@ -16,14 +16,8 @@ extends Node2D
 const HIGHLIGHT_SOURCE_ID = 0
 const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
 
-var p1_troops_to_deploy: Array[PackedScene] = []:
-	set(value):
-		p1_troops_to_deploy = value
-		update_turn_ui()
-var p2_troops_to_deploy: Array[PackedScene] = []:
-	set(value):
-		p2_troops_to_deploy = value
-		update_turn_ui()
+var p1_troops_to_deploy: Array[PackedScene] = []
+var p2_troops_to_deploy: Array[PackedScene] = []
 	
 
 var occupied_tiles = {}
@@ -40,12 +34,8 @@ enum State {
 	CHARACTER_MOVING
 }
 
-var current_state = State.DEPLOY_P1:
-	set(value):
-		current_state = value
-		update_turn_ui()
-
 var current_state_plus: GameState = null
+
 var states = {}
 
 @onready var state_container = $States as Node
@@ -58,17 +48,19 @@ var current_player_turn: int = 1
 func _ready() -> void:
 	p1_troops_to_deploy = [tank_scene, mid_scene, ranged_scene]
 	p2_troops_to_deploy = [tank_scene, mid_scene, ranged_scene]
-	current_state = State.DEPLOY_P1
+
 	states = {
 		State.DEPLOY_P1: DeployP1State.new(),
 		State.DEPLOY_P2: DeployP2State.new(),
 		State.IDLE: IdleState.new(),
+		State.CHARACTER_MOVING: CharacterMovingState.new(),
 		State.CHARACTER_SELECTED: CharacterSelectState.new(),
 	}
+
 	for state in states.values():
 		state.controller = self
 		state_container.add_child(state)
-	update_turn_ui()
+
 	transition_to(State.DEPLOY_P1)
 
 func transition_to(state: State) -> void:
@@ -81,6 +73,7 @@ func transition_to(state: State) -> void:
 
 	current_state_plus = states[state]
 	current_state_plus.enter()
+	update_turn_ui()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -96,22 +89,21 @@ func _input(_event: InputEvent) -> void:
 	pass
 
 func _unhandled_input(event: InputEvent) -> void:
-	if current_state == State.CHARACTER_MOVING:
+	if current_state_plus is CharacterMovingState:
 		return
 
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			match current_state:
-				State.DEPLOY_P1:
-					handle_deploy_command(hovered_grid_pos, 1)
-				State.DEPLOY_P2:
-					handle_deploy_command(hovered_grid_pos, 2)
-				State.IDLE:
-					handle_character_selection(event.position)
-				State.CHARACTER_SELECTED:
-					handle_move_command(event.position)
+			if current_state_plus is DeployP1State:
+				handle_deploy_command(hovered_grid_pos, 1)
+			elif current_state_plus is DeployP2State:
+				handle_deploy_command(hovered_grid_pos, 2)
+			elif current_state_plus is IdleState:
+				handle_character_selection(event.position)
+			elif current_state_plus is CharacterSelectState:
+				handle_move_command(event.position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			if current_state == State.CHARACTER_SELECTED:
+			if current_state_plus is CharacterSelectState:
 				deselect_character()
 
 func clear_movement_range() -> void:
@@ -177,7 +169,6 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 			selected_character.actions_exhausted.connect(end_player_turn)
 			selected_character.move_finished.connect(_on_character_move_finished)
 
-			current_state = State.CHARACTER_SELECTED
 			transition_to(State.CHARACTER_SELECTED)
 			print("Character selected: %s" % selected_character.name)
 
@@ -221,7 +212,7 @@ func handle_move_command(_mouse_position: Vector2) -> void:
 	
 	update_tile_occupation(player_grid_pos, target_grid_pos, selected_character)
 	
-	current_state = State.CHARACTER_MOVING
+	transition_to(State.CHARACTER_MOVING)
 	selected_character.move(path)
 
 func deselect_character() -> void:
@@ -239,7 +230,7 @@ func deselect_character() -> void:
 
 		selected_character.deselect()
 		selected_character = null
-		current_state = State.IDLE
+		transition_to(State.IDLE)
 
 		print("Character deselected")
 
@@ -263,7 +254,6 @@ func _on_character_move_finished() -> void:
 		#_change_turn()
 		return
 	else:
-		current_state = State.CHARACTER_SELECTED
 		transition_to(State.CHARACTER_SELECTED)
 
 func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
@@ -305,44 +295,37 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	
 	if player_id == 1:
 		p1_troops_to_deploy.pop_front()
-		current_state = State.DEPLOY_P2
 		transition_to(State.DEPLOY_P2)
 		if p1_troops_to_deploy.size() == 0:
 			return
-		update_turn_ui()
 	else:
 		p2_troops_to_deploy.pop_front()
-		current_state = State.DEPLOY_P1
 		transition_to(State.DEPLOY_P1)
 		if p2_troops_to_deploy.size() == 0:
-			current_state = State.IDLE
 			transition_to(State.IDLE)
 			current_player_turn = 1
-			update_turn_ui()
-		update_turn_ui()
 	
 func update_turn_ui() -> void:
 	if turn_label:
-		match current_state:
-			State.DEPLOY_P1:
-				var p1_next_name = ""
-				if p1_troops_to_deploy.size() > 0:
-					p1_next_name = p1_troops_to_deploy[0].instantiate().stats.character_name
-				turn_label.text = "Player 1: Posicione sua tropa <%s>" % p1_next_name
-			State.DEPLOY_P2:
-				var p2_next_name = ""
-				if p2_troops_to_deploy.size() > 0:
-					p2_next_name = p2_troops_to_deploy[0].instantiate().stats.character_name
-				turn_label.text = "Player 2: Posicione sua tropa <%s>" % p2_next_name
-			State.IDLE:
-				turn_label.text = "Turno do Player %d" % current_player_turn
+		if current_state_plus is DeployP1State:
+			var p1_next_name = ""
+			if p1_troops_to_deploy.size() > 0:
+				p1_next_name = p1_troops_to_deploy[0].instantiate().stats.character_name
+			turn_label.text = "Player 1: Posicione sua tropa <%s>" % p1_next_name
+		elif current_state_plus is DeployP2State:
+			var p2_next_name = ""
+			if p2_troops_to_deploy.size() > 0:
+				p2_next_name = p2_troops_to_deploy[0].instantiate().stats.character_name
+			turn_label.text = "Player 2: Posicione sua tropa <%s>" % p2_next_name
+		elif current_state_plus is IdleState:
+			turn_label.text = "Turno do Player %d" % current_player_turn
 
 func end_player_turn() -> void:
 	_change_turn()
 	deselect_character()
 
 func _on_attack_button_pressed() -> void:
-	if current_state != State.CHARACTER_SELECTED:
+	if !(current_state_plus is CharacterSelectState):
 		print("No character selected to attack.")
 		return
 
