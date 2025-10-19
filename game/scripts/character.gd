@@ -12,11 +12,22 @@ class_name Character
 
 signal move_finished
 
+
 var move_speed: float = 100.0
 var current_tween: Tween = null
 
-var can_use_move_action: bool = true
-var can_use_standard_action: bool = true
+signal actions_exhausted
+
+var can_use_move_action: bool = true:
+	set(value):
+		can_use_move_action = value
+		if !can_use_move_action and !can_use_standard_action:
+			emit_signal("actions_exhausted")
+var can_use_standard_action: bool = true:
+	set(value):
+		can_use_standard_action = value
+		if !can_use_move_action and !can_use_standard_action:
+			emit_signal("actions_exhausted")
 
 @onready var selection_visual = $SelectionCircle
 @onready var sprite: Sprite2D = $Sprite2D
@@ -43,18 +54,20 @@ func move(path: PackedVector2Array) -> void:
 	if !can_use_move_action:
 		push_warning("Move action already used this turn!")
 		return
+
+	move_along_path(path)
 	
 	can_use_move_action = false
 	print("Character moved. Move action used.")
 
 
-func attack(target: Character) -> void:
+func attack() -> void:
 	if !can_use_standard_action:
 		push_warning("Standard action already used this turn!")
 		return
 	
 	can_use_standard_action = false
-	print("Character is attacking target %s. Standard action used." % target.stats.character_name)
+	print("Character attacked. Standard action used.")
 
 func run(path: PackedVector2Array) -> void:
 	if !can_use_standard_action:

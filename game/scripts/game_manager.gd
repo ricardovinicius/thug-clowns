@@ -11,6 +11,7 @@ extends Node2D
 @export var ranged_scene: PackedScene
 @export var mid_scene: PackedScene
 
+@onready var action_ui = $CanvasLayer/ActionUI
 
 const HIGHLIGHT_SOURCE_ID = 0
 const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
@@ -173,6 +174,7 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 			selected_character = selected_node
 			selected_node.select()
 
+			selected_character.actions_exhausted.connect(end_player_turn)
 			selected_character.move_finished.connect(_on_character_move_finished)
 
 			current_state = State.CHARACTER_SELECTED
@@ -220,14 +222,20 @@ func handle_move_command(_mouse_position: Vector2) -> void:
 	update_tile_occupation(player_grid_pos, target_grid_pos, selected_character)
 	
 	current_state = State.CHARACTER_MOVING
-	selected_character.move_along_path(path)
+	selected_character.move(path)
 
 func deselect_character() -> void:
 	clear_movement_range()
 	
 	if selected_character:
+		if selected_character.get("can_use_standard_action") and !selected_character.get("can_use_move_action"):
+			return
+
 		if selected_character.move_finished.is_connected(_on_character_move_finished):
 			selected_character.move_finished.disconnect(_on_character_move_finished)
+
+		if selected_character.actions_exhausted.is_connected(end_player_turn):
+			selected_character.actions_exhausted.disconnect(end_player_turn)
 
 		selected_character.deselect()
 		selected_character = null
@@ -235,9 +243,7 @@ func deselect_character() -> void:
 
 		print("Character deselected")
 
-func _on_character_move_finished() -> void:
-	deselect_character()
-
+func _change_turn() -> void:
 	if current_player_turn == 1:
 		current_player_turn = 2
 	else:
@@ -246,7 +252,19 @@ func _on_character_move_finished() -> void:
 	print("Now it's Player %d's turn" % current_player_turn)
 	update_turn_ui()
 
-	current_state = State.IDLE
+func _on_character_move_finished() -> void:
+	if selected_character == null:
+		transition_to(State.IDLE)
+		return
+	
+	if !selected_character.get("can_use_standard_action"):
+		print("Character has used all actions this turn.")
+		deselect_character()
+		#_change_turn()
+		return
+	else:
+		current_state = State.CHARACTER_SELECTED
+		transition_to(State.CHARACTER_SELECTED)
 
 func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	var target_layer: TileMapLayer
@@ -318,3 +336,19 @@ func update_turn_ui() -> void:
 				turn_label.text = "Player 2: Posicione sua tropa <%s>" % p2_next_name
 			State.IDLE:
 				turn_label.text = "Turno do Player %d" % current_player_turn
+
+func end_player_turn() -> void:
+	_change_turn()
+	deselect_character()
+
+func _on_attack_button_pressed() -> void:
+	if current_state != State.CHARACTER_SELECTED:
+		print("No character selected to attack.")
+		return
+
+	if selected_character == null:
+		print("No character selected to attack.")
+		return
+
+	print("Attack action initiated for character %s." % selected_character.name)
+	selected_character.attack()

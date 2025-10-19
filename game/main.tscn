@@ -55,6 +55,22 @@ tank_scene = ExtResource("5_272bh")
 ranged_scene = ExtResource("6_5vw27")
 mid_scene = ExtResource("7_kek77")
 
+[node name="CanvasLayer" type="CanvasLayer" parent="GameManager"]
+
+[node name="ActionUI" type="Panel" parent="GameManager/CanvasLayer"]
+visible = false
+offset_left = 14.0
+offset_top = 23.0
+offset_right = 54.0
+offset_bottom = 63.0
+
+[node name="AttackButton" type="Button" parent="GameManager/CanvasLayer/ActionUI"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 19.0
+offset_right = 18.0
+offset_bottom = 27.0
+
 [node name="States" type="Node" parent="GameManager"]
 
 [node name="TurnLabel" type="Label" parent="."]
@@ -68,3 +84,5 @@ visible = false
 position = Vector2(175, 87)
 tilemap = NodePath("../TileMapLayer")
 stats = ExtResource("9_kek77")
+
+[connection signal="pressed" from="GameManager/CanvasLayer/ActionUI/AttackButton" to="GameManager" method="_on_attack_button_pressed"]
