@@ -6,6 +6,7 @@ extends Node2D
 @export var highlight_layer: TileMapLayer
 @export var selector: Sprite2D
 @export var turn_label: Label
+@export var round_label: Label
 
 @export var tank_scene: PackedScene
 @export var ranged_scene: PackedScene
@@ -44,7 +45,10 @@ var selected_character: Node2D = null
 
 var current_player_turn: int = 1
 
-var current_round: int = 1
+var current_round: int = 0:
+	set(value):
+		current_round = value
+		update_round_ui()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -145,8 +149,31 @@ func show_movement_range(character: Node2D) -> void:
 		
 		for tile in valid_tiles:
 			highlight_layer.set_cell(tile, HIGHLIGHT_SOURCE_ID, HIGHLIGHT_ATLAS_COORDS)
-		
-		
+
+func start_new_round():
+	current_round += 1
+	print("Starting Round %d" % current_round)
+
+	for unit in get_tree().get_nodes_in_group("Player1Units"):
+		unit.on_round_start()
+	for unit in get_tree().get_nodes_in_group("Player2Units"):
+		unit.on_round_start()
+	
+	current_player_turn = 1
+	start_player_turn()
+
+func start_player_turn():
+	if check_if_all_characters_acted_by_player(current_player_turn):
+		if current_player_turn == 2:
+			start_new_round()
+		else:
+			_change_turn()
+		return
+
+	print("Player %d's turn started." % current_player_turn)
+	transition_to(State.IDLE)
+	update_turn_ui()
+	
 func handle_character_selection(mouse_position: Vector2) -> void:
 	var space_state = get_world_2d().direct_space_state
 
@@ -240,6 +267,12 @@ func deselect_character() -> void:
 
 		print("Character deselected")
 
+func check_if_all_characters_acted_by_player(player_id: int) -> bool:
+	for unit in get_tree().get_nodes_in_group("Player%dUnits" % player_id):
+		if !unit.get("has_acted_this_round"):
+			return false
+	return true
+
 func _change_turn() -> void:
 	if current_player_turn == 1:
 		current_player_turn = 2
@@ -247,7 +280,9 @@ func _change_turn() -> void:
 		current_player_turn = 1
 
 	print("Now it's Player %d's turn" % current_player_turn)
+	
 	update_turn_ui()
+	start_player_turn()
 
 func _on_character_move_finished() -> void:
 	if selected_character == null:
@@ -257,7 +292,7 @@ func _on_character_move_finished() -> void:
 	if !selected_character.get("can_use_standard_action"):
 		print("Character has used all actions this turn.")
 		deselect_character()
-		#_change_turn()
+		_change_turn()
 		return
 	else:
 		transition_to(State.CHARACTER_SELECTED)
@@ -287,8 +322,10 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	var new_troop = null
 	if player_id == 1:
 		new_troop = p1_troops_to_deploy[0].instantiate()
+		new_troop.add_to_group("Player1Units")
 	else:
 		new_troop = p2_troops_to_deploy[0].instantiate()
+		new_troop.add_to_group("Player2Units")
 	new_troop.player_id = player_id
 	new_troop.tilemap = tilemap
 
@@ -308,8 +345,7 @@ func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 		p2_troops_to_deploy.pop_front()
 		transition_to(State.DEPLOY_P1)
 		if p2_troops_to_deploy.size() == 0:
-			transition_to(State.IDLE)
-			current_player_turn = 1
+			start_new_round()
 	
 func update_turn_ui() -> void:
 	if turn_label:
@@ -326,13 +362,19 @@ func update_turn_ui() -> void:
 		elif current_state_plus is IdleState:
 			turn_label.text = "Turno do Player %d" % current_player_turn
 
+func update_round_ui() -> void:
+	if round_label:
+		round_label.text = "Round %d" % current_round
+
 func _on_actions_exhausted() -> void:
+	print("Character has exhausted all actions this turn.")
 	selected_character.inactive_for_round()
+	
 	end_player_turn()
 
 func end_player_turn() -> void:
-	_change_turn()
 	deselect_character()
+	_change_turn()
 
 func _on_attack_button_pressed() -> void:
 	if !(current_state_plus is CharacterSelectState):

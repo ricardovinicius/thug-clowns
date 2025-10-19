@@ -43,7 +43,7 @@ material = SubResource("CanvasItemMaterial_1bvp3")
 texture = ExtResource("3_lquwl")
 offset = Vector2(0, 8)
 
-[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "spawn_layer_p1", "spawn_layer_p2", "highlight_layer", "selector", "turn_label")]
+[node name="GameManager" type="Node2D" parent="." node_paths=PackedStringArray("tilemap", "spawn_layer_p1", "spawn_layer_p2", "highlight_layer", "selector", "turn_label", "round_label")]
 script = ExtResource("2_0xm2m")
 tilemap = NodePath("../TileMapLayer")
 spawn_layer_p1 = NodePath("../TileMapLayer/SpawnZone_P1")
@@ -51,6 +51,7 @@ spawn_layer_p2 = NodePath("../TileMapLayer/SpawnZone_P2")
 highlight_layer = NodePath("../HighlightLayer")
 selector = NodePath("../Selector")
 turn_label = NodePath("../TurnLabel")
+round_label = NodePath("../RoundLabel")
 tank_scene = ExtResource("5_272bh")
 ranged_scene = ExtResource("6_5vw27")
 mid_scene = ExtResource("7_kek77")
@@ -78,6 +79,12 @@ offset_left = 12.0
 offset_top = 148.0
 offset_right = 52.0
 offset_bottom = 171.0
+
+[node name="RoundLabel" type="Label" parent="."]
+offset_left = 169.0
+offset_top = 4.0
+offset_right = 209.0
+offset_bottom = 27.0
 
 [node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("8_kek77")]
 visible = false
