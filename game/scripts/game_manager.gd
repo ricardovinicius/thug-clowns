@@ -74,7 +74,7 @@ func _ready() -> void:
 	for state in states.values():
 		state.controller = self
 		state_container.add_child(state)
-
+	
 	transition_to(State.DEPLOY_P1)
 
 func transition_to(state: State) -> void:
@@ -518,9 +518,16 @@ func _on_character_died(character: Node2D) -> void:
 
 func _check_game_over(dead_player_id: int) -> void:
 	var remaining_units = get_tree().get_nodes_in_group("Player%dUnits" % dead_player_id)
-	if remaining_units.size() == 0:
-		print("Player %d has no remaining units. Player %d wins!" % [dead_player_id, 3 - dead_player_id])
 
-		turn_label.text = "Player %d Wins!" % (3 - dead_player_id)
-		update_turn_ui()
+	if remaining_units.size() == 0:
+		var winner_id = 3 - dead_player_id
+		print("Player %d has no remaining units. Player %d wins!" % [dead_player_id, 3 - dead_player_id])
+		
 		get_tree().paused = true
+		
+		var victory_scene = load("res://menus/end_game_menu.tscn").instantiate()
+		
+		victory_scene.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+		
+		victory_scene.set_winner(winner_id)
+		add_child(victory_scene)

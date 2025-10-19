@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0vnxqj64500h"]
+
+[ext_resource type="Script" uid="uid://bhjnvevelds6n" path="res://menus/end_screen.gd" id="1_ahgcq"]
+[ext_resource type="FontFile" uid="uid://cekdd800l6al2" path="res://menus/GrapeSoda.ttf" id="2_7bmhb"]
+
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ahgcq")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.469)
+
+[node name="MenuButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -63.5
+offset_top = -15.5
+offset_right = 63.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Voltar ao Menu"
+
+[node name="WinnerLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -63.0
+offset_right = 75.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_7bmhb")
+theme_override_font_sizes/font_size = 36
+text = "O jogador X venceu"
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MenuButton" to="." method="_on_voltar_ao_menu_pressed"]
