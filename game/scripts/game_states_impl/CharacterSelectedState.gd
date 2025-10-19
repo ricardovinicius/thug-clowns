@@ -2,16 +2,16 @@ class_name CharacterSelectState
 extends GameState
 
 
-
 func enter():
 	var character = controller.selected_character
 
-	if char == null:
+	if character == null:
 		push_warning("No character selected in CharacterSelectedState.")
 		controller.transition_to(controller.State.IDLE)
 		return
 
-	controller.action_ui.visible = true
+	var ui_to_show = controller.action_ui_p1 if controller.current_player_turn == 1 else controller.action_ui_p2
+	ui_to_show.show()
 	
 	print("Character %s selected." % character.stats.character_name)
 	
@@ -19,7 +19,8 @@ func enter():
 		controller.show_movement_range(character)
 
 func exit():
-	controller.action_ui.visible = false
+	var ui_to_hide = controller.action_ui_p1 if controller.current_player_turn == 1 else controller.action_ui_p2
+	ui_to_hide.hide()
 	controller.clear_movement_range()
 
 func process(delta: float):

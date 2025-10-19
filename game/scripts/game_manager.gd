@@ -12,7 +12,8 @@ extends Node2D
 @export var ranged_scene: PackedScene
 @export var mid_scene: PackedScene
 
-@onready var action_ui = $CanvasLayer/ActionUI
+@onready var action_ui_p1 = $CanvasLayer/ActionUI_P1
+@onready var action_ui_p2 = $CanvasLayer/ActionUI_P2
 
 const HIGHLIGHT_SOURCE_ID = 0
 const HIGHLIGHT_ATLAS_COORDS = Vector2i(0, 0)
