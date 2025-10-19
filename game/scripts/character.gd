@@ -88,9 +88,9 @@ func attack() -> void:
 	can_use_standard_action = false
 	print("Character attacked. Standard action used.")
 
-func run(path: PackedVector2Array) -> void:
+func run() -> void:
 	if !can_use_standard_action:
-		push_warning("Run action already used this turn!")
+		push_warning("Standard action already used this turn!")
 		return
 	
 	can_use_standard_action = false

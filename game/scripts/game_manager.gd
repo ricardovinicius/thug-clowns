@@ -388,3 +388,16 @@ func _on_attack_button_pressed() -> void:
 
 	print("Attack action initiated for character %s." % selected_character.name)
 	selected_character.attack()
+
+
+func _on_run_button_pressed() -> void:
+	if !(current_state_plus is CharacterSelectState):
+		print("No character selected to run.")
+		return
+	
+	if selected_character == null:
+		print("No character selected to run.")
+		return
+
+	print("Run action initiated for character %s." % selected_character.name)
+	selected_character.run()
