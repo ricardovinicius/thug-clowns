@@ -44,6 +44,8 @@ var selected_character: Node2D = null
 
 var current_player_turn: int = 1
 
+var current_round: int = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	p1_troops_to_deploy = [tank_scene, mid_scene, ranged_scene]
@@ -163,10 +165,14 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 				print("Cannot select character: Not player's turn")
 				return
 
+			if selected_node.get("has_acted_this_round"):
+				print("Cannot select character: Character has already acted this round")
+				return
+
 			selected_character = selected_node
 			selected_node.select()
 
-			selected_character.actions_exhausted.connect(end_player_turn)
+			selected_character.actions_exhausted.connect(_on_actions_exhausted)
 			selected_character.move_finished.connect(_on_character_move_finished)
 
 			transition_to(State.CHARACTER_SELECTED)
@@ -225,8 +231,8 @@ func deselect_character() -> void:
 		if selected_character.move_finished.is_connected(_on_character_move_finished):
 			selected_character.move_finished.disconnect(_on_character_move_finished)
 
-		if selected_character.actions_exhausted.is_connected(end_player_turn):
-			selected_character.actions_exhausted.disconnect(end_player_turn)
+		if selected_character.actions_exhausted.is_connected(_on_actions_exhausted):
+			selected_character.actions_exhausted.disconnect(_on_actions_exhausted)
 
 		selected_character.deselect()
 		selected_character = null
@@ -319,6 +325,10 @@ func update_turn_ui() -> void:
 			turn_label.text = "Player 2: Posicione sua tropa <%s>" % p2_next_name
 		elif current_state_plus is IdleState:
 			turn_label.text = "Turno do Player %d" % current_player_turn
+
+func _on_actions_exhausted() -> void:
+	selected_character.inactive_for_round()
+	end_player_turn()
 
 func end_player_turn() -> void:
 	_change_turn()

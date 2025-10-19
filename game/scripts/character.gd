@@ -45,10 +45,23 @@ func apply_stats(stats_to_apply: CharacterStats) -> void:
 	
 	movement_range = stats_to_apply.movement_range
 
-func on_turn_start() -> void:
+var has_acted_this_round: bool = false
+
+func on_round_start() -> void:
+	active_for_round()
+	print("Character's round started. Actions reset.")
+
+func inactive_for_round() -> void:
+	has_acted_this_round = true
+	modulate = Color(0.5, 0.5, 0.5)
+	print("Character is inactive for this round.")
+
+func active_for_round() -> void:
 	can_use_move_action = true
 	can_use_standard_action = true
-	print("Character's turn started. Actions reset.")
+	has_acted_this_round = false
+	modulate = Color(1, 1, 1)
+	print("Character is active for this round.")
 
 func move(path: PackedVector2Array) -> void:
 	if !can_use_move_action:
