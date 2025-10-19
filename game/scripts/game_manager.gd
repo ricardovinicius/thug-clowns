@@ -193,7 +193,11 @@ func start_player_turn():
 	var group_name = "Player%dUnits" % current_player_turn
 	if get_tree().get_nodes_in_group(group_name).size() == 0:
 		print("Player %d has no units left to act." % current_player_turn)
-		end_player_turn()
+		
+		if current_player_turn == 2:
+			_change_turn()
+		else:
+			start_new_round()
 		return
 
 	if check_if_all_characters_acted_by_player(current_player_turn):
@@ -249,6 +253,11 @@ func update_tile_occupation(from_pos: Vector2i, to_pos: Vector2i, character: Nod
 
 func handle_move_command(_mouse_position: Vector2) -> void:
 	if selected_character == null:
+		return
+	
+	if selected_character.can_use_move_action == false:
+		print("Selected character cannot move: No move action left.")
+		transition_to(State.CHARACTER_SELECTED)
 		return
 
 	var player_grid_pos = tilemap.local_to_map(selected_character.global_position)
@@ -388,13 +397,7 @@ func _on_character_move_finished() -> void:
 		transition_to(State.IDLE)
 		return
 	
-	if !selected_character.get("can_use_standard_action"):
-		print("Character has used all actions this turn.")
-		deselect_character()
-		_change_turn()
-		return
-	else:
-		transition_to(State.CHARACTER_SELECTED)
+	transition_to(State.CHARACTER_SELECTED)
 
 func handle_deploy_command(map_coords: Vector2i, player_id: int) -> void:
 	var target_layer: TileMapLayer
@@ -486,18 +489,27 @@ func _on_attack_button_pressed() -> void:
 		print("No character selected to attack.")
 		return
 
+	if selected_character.can_use_standard_action == false:
+		print("Selected character cannot attack: No standard action left.")
+		return
+
 	print("Attack action initiated for character %s." % selected_character.name)
 	print("Transitioning to SelectingAttackTargetState.")
 	transition_to(State.SELECTING_ATTACK_TARGET)
 
 
 func _on_run_button_pressed() -> void:
+	
 	if !(current_state_plus is CharacterSelectState):
 		print("No character selected to run.")
 		return
 	
 	if selected_character == null:
 		print("No character selected to run.")
+		return
+	
+	if selected_character.can_use_standard_action == false:
+		print("Selected character cannot run: No standard action left.")
 		return
 
 	print("Run action initiated for character %s." % selected_character.name)
@@ -515,6 +527,32 @@ func _on_character_died(character: Node2D) -> void:
 		deselect_character()
 	
 	call_deferred("_check_game_over", character.player_id)
+
+func _on_special_button_pressed() -> void:
+	if !(current_state_plus is CharacterSelectState):
+		print("No character selected to use special ability.")
+		return
+	
+	if selected_character == null:
+		print("No character selected to use special ability.")
+		return
+
+	if selected_character.can_use_standard_action == false:
+		print("Selected character cannot use special ability: No standard action left.")
+		return
+
+	if !selected_character.has_method("use_special_ability"):
+		print("Selected character does not have a special ability.")
+		return
+
+	print("Special ability action initiated for character %s." % selected_character.name)
+	
+	match selected_character.stats.special_ability.targeting_type:
+		SpecialAbility.TargetingType.SELF:
+			selected_character.use_special_ability([selected_character])
+		SpecialAbility.TargetingType.ENEMY:
+			transition_to(State.SELECTING_ATTACK_TARGET)
+	deselect_character()
 
 func _check_game_over(dead_player_id: int) -> void:
 	var remaining_units = get_tree().get_nodes_in_group("Player%dUnits" % dead_player_id)

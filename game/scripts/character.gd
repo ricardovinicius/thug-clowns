@@ -74,7 +74,7 @@ func on_round_start() -> void:
 
 func inactive_for_round() -> void:
 	has_acted_this_round = true
-	modulate = Color(0.5, 0.5, 0.5)
+	modulate.a = 0.5
 	print("Character is inactive for this round.")
 
 func active_for_round() -> void:
