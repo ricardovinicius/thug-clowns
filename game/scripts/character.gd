@@ -15,6 +15,9 @@ signal move_finished
 var move_speed: float = 100.0
 var current_tween: Tween = null
 
+var can_use_move_action: bool = true
+var can_use_standard_action: bool = true
+
 @onready var selection_visual = $SelectionCircle
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -30,6 +33,19 @@ func apply_stats(stats_to_apply: CharacterStats) -> void:
 		print("Applied sprite texture for %s" % stats_to_apply.character_name)
 	
 	movement_range = stats_to_apply.movement_range
+
+func on_turn_start() -> void:
+	can_use_move_action = true
+	can_use_standard_action = true
+	print("Character's turn started. Actions reset.")
+
+func move(path: PackedVector2Array) -> void:
+	if !can_use_move_action:
+		push_warning("Move action already used this turn!")
+		return
+	
+	can_use_move_action = false
+	print("Character moved. Move action used.")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
