@@ -1,5 +1,5 @@
 extends Node2D
-class_name Character
+class_name CharacterAnimated
 
 @export var tilemap: TileMapLayer
 @export var player_id: int
@@ -19,7 +19,7 @@ var can_use_move_action: bool = true
 var can_use_standard_action: bool = true
 
 @onready var selection_visual = $SelectionCircle
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 
 func select():
 	selection_visual.visible = true
@@ -29,7 +29,7 @@ func deselect():
 
 func apply_stats(stats_to_apply: CharacterStats) -> void:
 	if sprite and stats_to_apply.sprite_texture:
-		sprite.texture = stats_to_apply.sprite_texture
+		# sprite.texture = stats_to_apply.sprite_texture
 		print("Applied sprite texture for %s" % stats_to_apply.character_name)
 	
 	movement_range = stats_to_apply.movement_range

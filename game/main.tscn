@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://wuov3qqkqij8"]
+[gd_scene load_steps=11 format=4 uid="uid://wuov3qqkqij8"]
 
 [ext_resource type="TileSet" uid="uid://ci3jneu422ekh" path="res://tileset.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://d31f2ds0yk7ns" path="res://scripts/game_manager.gd" id="2_0xm2m"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dpdqu0w8xekop" path="res://tank_char.tscn" id="5_272bh"]
 [ext_resource type="PackedScene" uid="uid://b6ksmm8rop6ya" path="res://ranged_char.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://4cde370j31hb" path="res://mid_char.tscn" id="7_kek77"]
+[ext_resource type="PackedScene" uid="uid://3alpsgfymeb7" path="res://test_char.tscn" id="8_kek77"]
+[ext_resource type="Resource" uid="uid://osp7qj5xbrxt" path="res://scripts/character_stats/TestStats.tres" id="9_kek77"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1bvp3"]
 
@@ -60,3 +62,8 @@ offset_left = 12.0
 offset_top = 148.0
 offset_right = 52.0
 offset_bottom = 171.0
+
+[node name="Player" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("8_kek77")]
+position = Vector2(175, 87)
+tilemap = NodePath("../TileMapLayer")
+stats = ExtResource("9_kek77")

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CharacterStats" load_steps=3 format=3 uid="uid://osp7qj5xbrxt"]
+
+[ext_resource type="Script" uid="uid://667grtldbf7d" path="res://scripts/character_stats/CharacterStats.gd" id="1_vu6yy"]
+[ext_resource type="Texture2D" uid="uid://df0ao1sbeoueo" path="res://assets/palhaco_1_animation.png" id="2_nkdjm"]
+
+[resource]
+script = ExtResource("1_vu6yy")
+character_name = "Test"
+movement_range = 5
+sprite_texture = ExtResource("2_nkdjm")
+metadata/_custom_type_script = "uid://667grtldbf7d"

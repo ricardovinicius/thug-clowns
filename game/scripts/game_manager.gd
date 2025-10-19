@@ -62,6 +62,7 @@ func _ready() -> void:
 		State.DEPLOY_P1: DeployP1State.new(),
 		State.DEPLOY_P2: DeployP2State.new(),
 		State.IDLE: IdleState.new(),
+		State.CHARACTER_SELECTED: CharacterSelectState.new(),
 	}
 	for state in states.values():
 		state.controller = self
@@ -175,9 +176,10 @@ func handle_character_selection(mouse_position: Vector2) -> void:
 			selected_character.move_finished.connect(_on_character_move_finished)
 
 			current_state = State.CHARACTER_SELECTED
+			transition_to(State.CHARACTER_SELECTED)
 			print("Character selected: %s" % selected_character.name)
-			
-			show_movement_range(selected_character)
+
+			# show_movement_range(selected_character)
 	
 func update_tile_occupation(from_pos: Vector2i, to_pos: Vector2i, character: Node2D):
 	occupied_tiles.erase(from_pos)
