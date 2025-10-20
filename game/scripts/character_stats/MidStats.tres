@@ -16,8 +16,8 @@ metadata/_custom_type_script = "uid://bni15t6gyuk4j"
 [resource]
 script = ExtResource("1_8ni3u")
 character_name = "Mid"
-max_health = 40
-attack_power = 5
+max_health = 30
+attack_power = 10
 movement_range = 3
 primary_attack_range = 1
 animations_p1 = ExtResource("1_hds6u")

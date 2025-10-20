@@ -17,9 +17,9 @@ metadata/_custom_type_script = "uid://c4qqd8m6fb8b3"
 [resource]
 script = ExtResource("1_ijko2")
 character_name = "Tank"
-max_health = 50
-attack_power = 5
-movement_range = 3
+max_health = 45
+attack_power = 6
+movement_range = 2
 primary_attack_range = 1
 animations_p1 = ExtResource("1_2b171")
 animations_p2 = ExtResource("2_26wkp")
